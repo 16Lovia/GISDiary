@@ -2,6 +2,8 @@
 {
     partial class Form1
     {
+
+        //test_lei
         /// <summary>
         /// 必需的设计器变量。
         /// </summary>
