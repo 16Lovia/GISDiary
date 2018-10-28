@@ -3,7 +3,7 @@
     partial class Form1
     {
 
-        //test_lei
+        //test_leilei
         /// <summary>
         /// 必需的设计器变量。
         /// </summary>
