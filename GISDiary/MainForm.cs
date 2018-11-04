@@ -12,16 +12,16 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.NetworkAnalysis;
 using ESRI.ArcGIS.Display;
-
+using System.Runtime.InteropServices;
 
 
 
 
 namespace GISDiary
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
             InitializeComponent();
@@ -32,6 +32,7 @@ namespace GISDiary
             mPointToEID = null;
         }
 
+        //-----------------------------------
         //网络分析
 
         private IGeometricNetwork mGeometricNetwork;//几何网络
@@ -43,7 +44,7 @@ namespace GISDiary
         
 
 
-        private void Form1_Load(object sender, EventArgs e)//网络加载
+        private void MainForm_Load(object sender, EventArgs e)//网络加载
         {
             //获取几何网络文件路径
             //注意修改此路径为当前存储路径
@@ -61,8 +62,8 @@ namespace GISDiary
             INetworkCollection pNetWorkCollection = pFeatureDataset as INetworkCollection;
             //获取network的数量,为零时返回
             int intNetworkCount = pNetWorkCollection.GeometricNetworkCount;
-            if (intNetworkCount < 1)
-                return;
+            //if (intNetworkCount < 1)
+            //    return;
             //FeatureDataset可能包含多个network，我们获取指定的network
             //注意network的名称的设置要与上面创建保持一致
             //mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("road_net");
@@ -130,7 +131,7 @@ namespace GISDiary
 
         //}
 
-        private void axMapControl1_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)
+        private void axMapControl1_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)//鼠标选点
         {
             if (e.button == 1)
             {
@@ -153,7 +154,7 @@ namespace GISDiary
             //label1.Text = " 当前坐标 X = " + e.mapX.ToString() + " Y = " + e.mapY.ToString() + " " + this.axMapControl1.MapUnits.ToString().Substring(4);
         }
 
-        private void startFindPath()
+        private void startFindPath()//开启路径规划
         {
             try
             {
@@ -300,6 +301,32 @@ namespace GISDiary
         private void btn_net_Click(object sender, EventArgs e)
         {
             startFindPath();
+        }
+
+        //-----------------------------------
+        //墓穴展示
+
+        [DllImport("user32")]
+        public static extern int SetParent(int hWndChild, int hWndNewParent);
+
+        private void showGrave()
+        {
+
+            //十字丝定位放大
+
+            //子窗体展示
+            Form_showGrave f2 = new Form_showGrave();
+            f2.MdiParent = this;
+            f2.StartPosition = FormStartPosition.CenterScreen;
+            f2.Show();
+            SetParent((int)f2.Handle, (int)this.Handle);
+
+
+        }
+
+        private void btn_show_Click(object sender, EventArgs e)
+        {
+            showGrave();
         }
     }
 }
