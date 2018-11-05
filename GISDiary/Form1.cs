@@ -14,12 +14,15 @@ using ESRI.ArcGIS.NetworkAnalysis;
 using ESRI.ArcGIS.Display;
 
 
+
 namespace GISDiary
 {
     public partial class Form1 : Form
     {
         public Form1()
         {
+         
+
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
             InitializeComponent();
             string filepath = "C:\\Users\\lcy\\Desktop\\GISDairy\\China.mxd";
@@ -50,6 +53,11 @@ namespace GISDiary
             }
         }
 
+        private void SolvePath(string weightName)
+        {
+            //创建ITraceFlowSolverGEN
+            ITraceFlowSolverGEN pTraceFlowSolverGEN=new 
+        }
         private void axMapControl1_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)
         {
             if (e.button == 1)
