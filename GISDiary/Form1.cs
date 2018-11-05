@@ -6,12 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.DataSourcesGDB;
-using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Geometry;
-using ESRI.ArcGIS.NetworkAnalysis;
-using ESRI.ArcGIS.Display;
 
 
 
@@ -56,7 +50,7 @@ namespace GISDiary
         private void SolvePath(string weightName)
         {
             //创建ITraceFlowSolverGEN
-            ITraceFlowSolverGEN pTraceFlowSolverGEN=new 
+          
         }
         private void axMapControl1_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)
         {
