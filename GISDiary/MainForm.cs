@@ -26,7 +26,7 @@ namespace GISDiary
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
             InitializeComponent();
             string filepath = @"res\ChinaOnlineCommunity.mxd";
-            axMapControl1.MousePointer = ESRI.ArcGIS.Controls.esriControlsMousePointer.esriPointerArrowHourglass;         
+            axMapControl1.MousePointer = ESRI.ArcGIS.Controls.esriControlsMousePointer.esriPointerArrowHourglass;
             axMapControl1.LoadMxFile(filepath);
             axMapControl1.MousePointer = ESRI.ArcGIS.Controls.esriControlsMousePointer.esriPointerDefault;
             mPointToEID = null;
@@ -48,23 +48,25 @@ namespace GISDiary
         {
             //获取几何网络文件路径
             //注意修改此路径为当前存储路径
-            string strPath = @"res\road_hongshan.mdb";
+            //string strPath = @"res\road_hongshan.mdb";
+            string strPath = @"res\USA_Highway_Network_GDB.mdb";
             //打开工作空间
             IWorkspaceFactory pWorkspaceFactory = new AccessWorkspaceFactory();
             IFeatureWorkspace pFeatureWorkspace = pWorkspaceFactory.OpenFromFile(strPath, 0) as IFeatureWorkspace;
             //获取要素数据集
             //注意名称的设置要与上面创建保持一致
-            IFeatureDataset pFeatureDataset = pFeatureWorkspace.OpenFeatureDataset("road");
+            IFeatureDataset pFeatureDataset = pFeatureWorkspace.OpenFeatureDataset("high");
            
             //获取network集合
             INetworkCollection pNetWorkCollection = pFeatureDataset as INetworkCollection;
             //获取network的数量,为零时返回
             int intNetworkCount = pNetWorkCollection.GeometricNetworkCount;
-            if (intNetworkCount < 1)
-                return;
+            //if (intNetworkCount < 1)
+            //    return;
             //FeatureDataset可能包含多个network，我们获取指定的network
             //注意network的名称的设置要与上面创建保持一致
-            mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("road_net");
+           // mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("road_net");
+            mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("high_Net");
             //将Network中的每个要素类作为一个图层加入地图控件
             IFeatureClassContainer pFeatClsContainer = mGeometricNetwork as IFeatureClassContainer;
             //获取要素类数量，为零时返回
@@ -84,32 +86,32 @@ namespace GISDiary
                 this.axMapControl1.AddLayer((ILayer)pFeatureLayer, 0);
             }
 
-            //计算snap tolerance为图层最大宽度的1/100
-            //获取图层数量
-            int intLayerCount = this.axMapControl1.LayerCount;
-            IGeoDataset pGeoDataset;
-            IEnvelope pMaxEnvelope = new EnvelopeClass();
-            for (int i = 0; i < intLayerCount; i++)
-            {
-                //获取图层
-                pFeatureLayer = this.axMapControl1.get_Layer(i) as IFeatureLayer;
-                pGeoDataset = pFeatureLayer as IGeoDataset;
-               //通过Union获得较大图层范围
-                pMaxEnvelope.Union(pGeoDataset.Extent);
-            }
-            double dblWidth = pMaxEnvelope.Width;
-            double dblHeight = pMaxEnvelope.Height;
-            double dblSnapTol;
-            if (dblHeight < dblWidth)
-               dblSnapTol = dblWidth * 0.01;
-            else
-                dblSnapTol = dblHeight * 0.01;
+           // 计算snap tolerance为图层最大宽度的1/ 100
+          //  获取图层数量
+            //int intLayerCount = this.axMapControl1.LayerCount;
+            //IGeoDataset pGeoDataset;
+            //IEnvelope pMaxEnvelope = new EnvelopeClass();
+            //for (int i = 0; i < intLayerCount; i++)
+            //{
+            //    //获取图层
+            //    pFeatureLayer = this.axMapControl1.get_Layer(i) as IFeatureLayer;
+            //    pGeoDataset = pFeatureLayer as IGeoDataset;
+            //    //通过Union获得较大图层范围
+            //    pMaxEnvelope.Union(pGeoDataset.Extent);
+            //}
+            //double dblWidth = pMaxEnvelope.Width;
+            //double dblHeight = pMaxEnvelope.Height;
+            //double dblSnapTol;
+            //if (dblHeight < dblWidth)
+            //    dblSnapTol = dblWidth * 0.01;
+            //else
+            //    dblSnapTol = dblHeight * 0.01;
 
-            //设置源地图，几何网络以及捕捉容差
-            mPointToEID = new PointToEIDClass();
-            mPointToEID.SourceMap = this.axMapControl1.Map;
-            mPointToEID.GeometricNetwork = mGeometricNetwork;
-            mPointToEID.SnapTolerance = dblSnapTol;
+            ////设置源地图，几何网络以及捕捉容差
+            //mPointToEID = new PointToEIDClass();
+            //mPointToEID.SourceMap = this.axMapControl1.Map;
+            //mPointToEID.GeometricNetwork = mGeometricNetwork;
+            //mPointToEID.SnapTolerance = dblSnapTol;
 
         }
 
