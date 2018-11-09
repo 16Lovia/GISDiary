@@ -13,9 +13,8 @@ using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.NetworkAnalysis;
 using ESRI.ArcGIS.Display;
 using System.Runtime.InteropServices;
-
-
-
+using ESRI.ArcGIS.NetworkAnalyst;
+using System.Collections;
 
 namespace GISDiary
 {
@@ -24,16 +23,29 @@ namespace GISDiary
         public MainForm()
         {
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
+            ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);
+          
             InitializeComponent();
-            string filepath = @"res\ChinaOnlineCommunity.mxd";
-            axMapControl1.MousePointer = ESRI.ArcGIS.Controls.esriControlsMousePointer.esriPointerArrowHourglass;
+            string filepath = @"res\China.mxd";
+            //string filepath = @"D:\code\resource\墓穴地shp\墓穴地shp\GravePoint.shp";
+            axMapControl1.MousePointer = ESRI.ArcGIS.Controls.esriControlsMousePointer.esriPointerArrowHourglass;         
             axMapControl1.LoadMxFile(filepath);
             axMapControl1.MousePointer = ESRI.ArcGIS.Controls.esriControlsMousePointer.esriPointerDefault;
             mPointToEID = null;
+            if (m_ipPathFinder == null)
+                m_ipPathFinder = new NetWork();
+            if (m_ipPathFinder.m_ipPoints == null)
+                m_ipPathFinder.m_ipPoints = new MultipointClass();
         }
 
         //-----------------------------------
-        //网络分析
+        /// <summary>
+        /// 路径分析
+        /// </summary>
+
+
+        //方法1
+
 
         private IGeometricNetwork mGeometricNetwork;//几何网络
         private IPointCollection mPointCollection;//给定点的集合
@@ -41,22 +53,22 @@ namespace GISDiary
         private IEnumNetEID mEnumNetEID_Junctions;//返回结果变量
         private IEnumNetEID mEnumNetEID_Edges;
         private double mdblPathCost;
-        
-
 
         private void MainForm_Load(object sender, EventArgs e)//网络加载
         {
+
+
             //获取几何网络文件路径
             //注意修改此路径为当前存储路径
             //string strPath = @"res\road_hongshan.mdb";
-            string strPath = @"res\USA_Highway_Network_GDB.mdb";
+            string strPath = @"D:\Riva\study\five\GIS_software\数据和程序\数据和程序\例子数据\Network\us.mdb";
             //打开工作空间
             IWorkspaceFactory pWorkspaceFactory = new AccessWorkspaceFactory();
             IFeatureWorkspace pFeatureWorkspace = pWorkspaceFactory.OpenFromFile(strPath, 0) as IFeatureWorkspace;
             //获取要素数据集
             //注意名称的设置要与上面创建保持一致
             IFeatureDataset pFeatureDataset = pFeatureWorkspace.OpenFeatureDataset("high");
-           
+
             //获取network集合
             INetworkCollection pNetWorkCollection = pFeatureDataset as INetworkCollection;
             //获取network的数量,为零时返回
@@ -65,8 +77,8 @@ namespace GISDiary
             //    return;
             //FeatureDataset可能包含多个network，我们获取指定的network
             //注意network的名称的设置要与上面创建保持一致
-           // mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("road_net");
-            mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("high_Net");
+            mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("high_net");
+
             //将Network中的每个要素类作为一个图层加入地图控件
             IFeatureClassContainer pFeatClsContainer = mGeometricNetwork as IFeatureClassContainer;
             //获取要素类数量，为零时返回
@@ -86,8 +98,10 @@ namespace GISDiary
                 this.axMapControl1.AddLayer((ILayer)pFeatureLayer, 0);
             }
 
-           // 计算snap tolerance为图层最大宽度的1/ 100
-          //  获取图层数量
+
+
+            //计算snap tolerance为图层最大宽度的1/100
+            //获取图层数量
             //int intLayerCount = this.axMapControl1.LayerCount;
             //IGeoDataset pGeoDataset;
             //IEnvelope pMaxEnvelope = new EnvelopeClass();
@@ -96,14 +110,14 @@ namespace GISDiary
             //    //获取图层
             //    pFeatureLayer = this.axMapControl1.get_Layer(i) as IFeatureLayer;
             //    pGeoDataset = pFeatureLayer as IGeoDataset;
-            //    //通过Union获得较大图层范围
+            //   //通过Union获得较大图层范围
             //    pMaxEnvelope.Union(pGeoDataset.Extent);
             //}
             //double dblWidth = pMaxEnvelope.Width;
             //double dblHeight = pMaxEnvelope.Height;
             //double dblSnapTol;
             //if (dblHeight < dblWidth)
-            //    dblSnapTol = dblWidth * 0.01;
+            //   dblSnapTol = dblWidth * 0.01;
             //else
             //    dblSnapTol = dblHeight * 0.01;
 
@@ -131,6 +145,39 @@ namespace GISDiary
 
         private void axMapControl1_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)//鼠标选点
         {
+            //IPoint ipNew;
+            //m_ipPathFinder.m_ipPoints = null;
+            //if (m_ipPathFinder.m_ipPoints == null)
+            //{
+            //    m_ipPathFinder.m_ipPoints = new MultipointClass();
+            //    m_ipPathFinder.StopPoints = m_ipPathFinder.m_ipPoints;
+            //}
+            //ipNew = this.axMapControl1.ActiveView.ScreenDisplay.DisplayTransformation.ToMapPoint(e.x, e.y);
+            //object o = Type.Missing;
+            //m_ipPathFinder.m_ipPoints.AddPoint(ipNew, ref o, ref o);
+
+            //if (e.button == 1)
+            //{
+            //    //记录鼠标点击的点
+            //    //m_ipPathFinder.m_ipPoints = null;
+            //    //if (m_ipPathFinder == null)
+            //    //    m_ipPathFinder = new NetWork();
+            //    IPoint pNewPoint = new PointClass();
+            //    pNewPoint.PutCoords(e.mapX, e.mapY);
+
+            //    //if (m_ipPathFinder.m_ipPoints == null)
+            //    //    m_ipPathFinder.m_ipPoints = new MultipointClass();
+            //    //添加点，before和after标记添加点的索引，这里不定义
+            //    object before = Type.Missing;
+            //    object after = Type.Missing;
+            //    m_ipPathFinder.m_ipPoints.AddPoint(pNewPoint, ref before, ref after);
+            //    int intCount = m_ipPathFinder.m_ipPoints.PointCount;
+            //}
+            ////this.axMapControl1.Extent = this.axMapControl1.TrackRectangle();
+            //else if (e.button == 2)//右键
+            //    this.axMapControl1.Pan();
+
+
             if (e.button == 1)
             {
                 //记录鼠标点击的点
@@ -143,9 +190,10 @@ namespace GISDiary
                 object before = Type.Missing;
                 object after = Type.Missing;
                 mPointCollection.AddPoint(pNewPoint, ref before, ref after);
-           
+                int intCount = mPointCollection.PointCount;
+
             }
-                //this.axMapControl1.Extent = this.axMapControl1.TrackRectangle();
+            //this.axMapControl1.Extent = this.axMapControl1.TrackRectangle();
             else if (e.button == 2)//右键
                 this.axMapControl1.Pan();
             //坐标显示
@@ -299,10 +347,54 @@ namespace GISDiary
         private void btn_net_Click(object sender, EventArgs e)
         {
             startFindPath();
+            //NetRoad();
+
+
+
         }
 
+
+
+        //方法2
+        private NetWork m_ipPathFinder;
+
+
+        private void NetRoad()
+        {
+            // 备注：在调用该类时的次序
+
+            //if (m_ipPathFinder == null)//打开几何网络工作空间
+            //{
+            //    m_ipPathFinder.m_ipMap = this.axMapControl1.ActiveView.FocusMap;
+            //    ILayer ipLayer = m_ipPathFinder.m_ipMap.get_Layer(1);
+            //    IFeatureLayer ipFeatureLayer = ipLayer as IFeatureLayer;
+            //    IFeatureDataset ipFDB = ipFeatureLayer.FeatureClass.FeatureDataset;
+            //    m_ipPathFinder.SetOrGetMap = m_ipPathFinder.m_ipMap;
+            //    m_ipPathFinder.OpenFeatureDatasetNetwork(ipFDB);
+            //}
+            m_ipPathFinder.m_ipMap = this.axMapControl1.ActiveView.FocusMap;
+            ILayer ipLayer = m_ipPathFinder.m_ipMap.get_Layer(0);
+            IFeatureLayer ipFeatureLayer = ipLayer as IFeatureLayer;
+            IFeatureDataset ipFDB = ipFeatureLayer.FeatureClass.FeatureDataset;
+            m_ipPathFinder.SetOrGetMap = m_ipPathFinder.m_ipMap;
+            m_ipPathFinder.OpenFeatureDatasetNetwork(ipFDB);
+            m_ipPathFinder.m_ipPoints = mPointCollection;
+            m_ipPathFinder.SolvePath("length");//先解析路径
+
+            IPolyline ipPolyResult = m_ipPathFinder.PathPolyLine();//最后返回最短路径
+
+        }
+        
         //-----------------------------------
-        //墓穴展示
+        /// <summary>
+        /// //墓穴展示
+        /// </summary>
+        /// <param name="hWndChild"></param>
+        /// <param name="hWndNewParent"></param>
+        /// <returns></returns>
+
+        
+        
 
         [DllImport("user32")]
         public static extern int SetParent(int hWndChild, int hWndNewParent);
@@ -313,11 +405,11 @@ namespace GISDiary
             //十字丝定位放大
 
             //子窗体展示
-            Form_showGrave f2 = new Form_showGrave();
-            f2.MdiParent = this;
-            f2.StartPosition = FormStartPosition.CenterScreen;
-            f2.Show();
-            SetParent((int)f2.Handle, (int)this.Handle);
+            Form_showGrave fn = new Form_showGrave();
+            fn.MdiParent = this;
+            fn.StartPosition = FormStartPosition.CenterScreen;
+            fn.Show();
+            SetParent((int)fn.Handle, (int)this.Handle);
 
 
         }
@@ -325,6 +417,26 @@ namespace GISDiary
         private void btn_show_Click(object sender, EventArgs e)
         {
             showGrave();
+        }
+
+        private void btn_Form1_Click(object sender, EventArgs e)
+        {
+
+            showForm();
+        }
+        private void showForm()
+        {
+
+            //十字丝定位放大
+
+            //子窗体展示
+            Form1 f1 = new Form1();
+            f1.MdiParent = this;
+            f1.StartPosition = FormStartPosition.CenterScreen;
+            f1.Show();
+            SetParent((int)f1.Handle, (int)this.Handle);
+
+
         }
     }
 }
