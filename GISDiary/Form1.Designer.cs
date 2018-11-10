@@ -34,15 +34,16 @@ namespace GISDiary
             this.axSceneControl1 = new ESRI.ArcGIS.Controls.AxSceneControl();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.axTOCControl1 = new ESRI.ArcGIS.Controls.AxTOCControl();
             this.axToolbarControl1 = new ESRI.ArcGIS.Controls.AxToolbarControl();
             this.axMapControl1 = new ESRI.ArcGIS.Controls.AxMapControl();
             this.axLicenseControl2 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.button1 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btn_flyPath = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.axSceneControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).BeginInit();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl2)).BeginInit();
             this.SuspendLayout();
@@ -64,6 +65,7 @@ namespace GISDiary
             this.axLicenseControl1.Enabled = true;
             this.axLicenseControl1.Location = new System.Drawing.Point(1285, 434);
             this.axLicenseControl1.Margin = new System.Windows.Forms.Padding(2);
+            this.axLicenseControl1.Location = new System.Drawing.Point(483, 0);
             this.axLicenseControl1.Name = "axLicenseControl1";
             this.axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
             this.axLicenseControl1.Size = new System.Drawing.Size(32, 32);
@@ -130,8 +132,9 @@ namespace GISDiary
             this.Controls.Add(this.button1);
             this.Controls.Add(this.axLicenseControl2);
             this.Controls.Add(this.axMapControl1);
+            this.ClientSize = new System.Drawing.Size(1421, 616);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.axToolbarControl1);
-            this.Controls.Add(this.axTOCControl1);
             this.Controls.Add(this.axLicenseControl1);
             this.Controls.Add(this.axSceneControl1);
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -141,10 +144,10 @@ namespace GISDiary
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.axSceneControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl2)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -154,8 +157,9 @@ namespace GISDiary
         private ESRI.ArcGIS.Controls.AxSceneControl axSceneControl1;
         private ESRI.ArcGIS.Controls.AxLicenseControl axLicenseControl1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private ESRI.ArcGIS.Controls.AxTOCControl axTOCControl1;
         private ESRI.ArcGIS.Controls.AxToolbarControl axToolbarControl1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btn_flyPath;
         private ESRI.ArcGIS.Controls.AxMapControl axMapControl1;
         private ESRI.ArcGIS.Controls.AxLicenseControl axLicenseControl2;
         private Button button1;

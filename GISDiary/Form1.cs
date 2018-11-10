@@ -1,8 +1,11 @@
 ﻿using ESRI.ArcGIS.Analyst3D;
+using ESRI.ArcGIS.Animation;
 using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geometry;
+using ESRI.ArcGIS.GlobeCore;
 using System;
 using System.Windows.Forms;
 
@@ -150,7 +153,20 @@ namespace GISDiary
             //获得显示范围
             IEnvelope pEnvelope = (IEnvelope)pActiveView.Extent;
 
+            //产生线段对象 line  
+            ILine pLine = new LineClass();
+            IPoint fromPt = ptCol.get_Point(i - 1);
+            IPoint toPt = ptCol.get_Point(i - 2);
+            pLine.PutCoords(fromPt, toPt);
 
+            //将线段对象添加到多义线对象polyline  
+            object Missing1 = Type.Missing;
+            object Missing2 = Type.Missing;
+            ISegment pSegment = pLine as ISegment;
+            if (m_polyline == null)
+                m_polyline = new PolylineClass();
+            m_polyline.AddSegment(pSegment, ref Missing1, ref Missing2);
+            int tttt = m_polyline.SegmentCount;
 
             //刷新
             pEnvelope.Expand(0.9, 0.9, true);
@@ -176,5 +192,138 @@ namespace GISDiary
         {
           
         }
+
+        private void btn_flyPath_Click(object sender, EventArgs e)
+        {
+            CreateAnimationFromPath();
+        }
+
+        #region"Create Animation from Path"
+
+        ///<summary> 由路径来创建一个Camera动画.这条路径有图层提供一条三维线要素</summary>
+        /// 
+        ///<param name="globe">IGlobe接口</param>
+        ///<param name="layer">一个包含PolyLine的ILayer接口</param>
+        ///<param name="featureID">包含路径的要素ID.Example: 123</param>
+        ///  
+        ///<remarks></remarks>
+        ///
+
+        //private IGlobe pGlobe;
+        private IScene scene;
+        private ILayer pLayer;
+        private int pFeatureID;
+
+        public void CreateAnimationFromPath()
+        {
+
+            //pGlobe = axGlobeControl1.Globe;
+            //pScene = axSceneControl1.Scene;
+            //IGlobeDisplay globeDisplay = pGlobe.GlobeDisplay;
+            //IGlobeDisplay globeDisplay = axGlobeControl1.Globe.GlobeDisplay;
+            //IScene scene = axSceneControl1.Scene.SceneGraph.ActiveViewer;
+            scene = axSceneControl1.Scene;
+
+            // 获取动画扩展
+            IBasicScene2 basicScene2 = scene as IBasicScene2;
+            IAnimationExtension animationExtension = basicScene2.AnimationExtension;
+
+            //获取路径
+
+            IWorkspaceFactory pWorkspaceFactory = new ShapefileWorkspaceFactory();
+
+            string path = @"D:\code\resource\PLine.shp";
+            string pFolder = System.IO.Path.GetDirectoryName(path);
+            string pFileName = System.IO.Path.GetFileName(path);
+
+            //2打开shapeFile工作空间
+            IWorkspace pWorkspace = pWorkspaceFactory.OpenFromFile(pFolder, 0);
+            IFeatureWorkspace pFeatureWorkspace = pWorkspace as IFeatureWorkspace;
+
+            //3、打开要素类
+            IFeatureClass pFeatureClass = pFeatureWorkspace.OpenFeatureClass(pFileName);
+
+            //4、创建要素图层
+            IFeatureLayer pFLayer = new FeatureLayerClass();
+
+            //5、关联图层和要素类
+            pFLayer.FeatureClass = pFeatureClass;
+            pFLayer.Name = pFeatureClass.AliasName;
+
+          
+            //string ShpPath = @"D:\code\resource\PLine.shp";
+            //string ShpPath1 = @"D:\code\resource";
+            //IWorkspaceFactory pWsF = new ShapefileWorkspaceFactory();
+            //IFeatureWorkspace pFW = (IFeatureWorkspace)pWsF.OpenFromFile(ShpPath1, 0);
+            ////pFullPaths[0].Substring(0,pFullPaths[0].LastIndexOf("\\"))=pFilePath，不包含文件名
+
+
+            
+
+            ////打开文件
+            //IFeatureClass pFeaC = pFW.OpenFeatureClass(ShpPath);
+            //IFeatureLayer pFeaL = new FeatureLayer();
+            //pFeaL.FeatureClass = pFeaC;
+            //pFeaL.Name = pFeaC.AliasName;
+           
+
+            
+
+
+            //string xjShpPath = @"D:\code\resource\PLine.shp";
+            //if (xjShpPath == null) return;
+            //string xjShpFolder = System.IO.Path.GetDirectoryName(xjShpPath);
+            //string xjShpFileName = System.IO.Path.GetFileName(xjShpPath);
+            ////工作工厂+工作空间
+            //IWorkspaceFactory xjShpWsF = new ShapefileWorkspaceFactory();
+            //IFeatureWorkspace xjShpFWs = (IFeatureWorkspace)xjShpWsF.OpenFromFile(xjShpFolder, 0);
+            ////新建矢量图层：要素+名称
+            //IWorkspace xjShpWs = xjShpWsF.OpenFromFile(xjShpFolder, 0);
+            //IFeatureClass xjShpFeatureClass = xjShpFWs.OpenFeatureClass(xjShpFileName);
+            //IFeatureLayer featureLayer = new FeatureLayer();
+            //featureLayer.FeatureClass = xjShpFeatureClass;
+            //featureLayer.Name = xjShpFeatureClass.AliasName;
+            //加载刷新
+            //this.axGlobeControl1.AddLayer(xjShpFeatureLayer);
+            //this.axSceneControl1.ActiveView.Refresh();
+            //this.axSceneControl1.AddLayer(xjShpFeatureLayer);
+            //this.axSceneControl1.ActiveView.Refresh();
+
+            //IFeatureLayer featureLayer = pLayer as IFeatureLayer;
+            IFeatureClass featureClass = pFLayer.FeatureClass;
+            pFeatureID = 0;
+            IFeature feature = featureClass.GetFeature(pFeatureID);
+            int a = featureClass.FeatureClassID;
+            IGeometry geometry = feature.Shape;
+
+            //创建AGAnimationUtils和AGImportPathOptions对象
+            ESRI.ArcGIS.Animation.IAGAnimationUtils agAnimationUtils = new AGAnimationUtilsClass();
+            ESRI.ArcGIS.Animation.IAGImportPathOptions agImportPathOptions = new AGImportPathOptionsClass();
+
+            // 设置AGImportPathOptions的属性
+            agImportPathOptions.BasicMap = (IBasicMap)scene;
+            agImportPathOptions.AnimationTracks = (IAGAnimationTracks)scene;
+            agImportPathOptions.AnimationType = new AnimationTypeGlobeCameraClass();
+            agImportPathOptions.AnimatedObject = scene.SceneGraph.ActiveViewer.Camera; //动画对象
+            agImportPathOptions.PathGeometry = geometry;                      //动画轨迹
+            agImportPathOptions.ConversionType = ESRI.ArcGIS.Animation.esriFlyFromPathType.esriFlyFromPathObsAndTarget;
+            agImportPathOptions.LookaheadFactor = 0.05;
+            agImportPathOptions.RollFactor = 0;
+
+            agImportPathOptions.AnimationEnvironment = animationExtension.AnimationEnvironment;
+            IAGAnimationContainer AGAnimationContainer = animationExtension.AnimationTracks.AnimationObjectContainer;
+
+            //创建并保存动画
+            agAnimationUtils.CreateFlybyFromPath(AGAnimationContainer, agImportPathOptions);
+            string SaveFilePath = @"D:\code\resource\fly.avi";
+            if (System.IO.File.Exists(SaveFilePath))
+            {
+                System.IO.File.Delete(SaveFilePath);
+                agAnimationUtils.SaveAnimationFile(AGAnimationContainer, SaveFilePath, esriArcGISVersion.esriArcGISVersion10);
+            }
+
+        }
+        #endregion
+
     }
 }
