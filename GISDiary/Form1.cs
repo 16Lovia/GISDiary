@@ -156,7 +156,7 @@ namespace GISDiary
 
         private void btn_flyPath_Click(object sender, EventArgs e)
         {
-            CreateAnimationFromPath();
+            //CreateAnimationFromPath();
         }
 
         #region"Create Animation from Path"
@@ -233,7 +233,7 @@ namespace GISDiary
         //    }
 
         //}
-        //#endregion
+        #endregion
 
     }
 }
