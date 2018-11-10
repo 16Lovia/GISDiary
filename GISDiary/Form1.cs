@@ -4,6 +4,7 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.esriSystem;
+using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.GlobeCore;
 using System;
@@ -145,48 +146,7 @@ namespace GISDiary
             {
             }
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //得到接口
-            IActiveView pActiveView = this.axMapControl1.Map as IActiveView;
-
-            //获得显示范围
-            IEnvelope pEnvelope = (IEnvelope)pActiveView.Extent;
-
-            //产生线段对象 line  
-            ILine pLine = new LineClass();
-            IPoint fromPt = ptCol.get_Point(i - 1);
-            IPoint toPt = ptCol.get_Point(i - 2);
-            pLine.PutCoords(fromPt, toPt);
-
-            //将线段对象添加到多义线对象polyline  
-            object Missing1 = Type.Missing;
-            object Missing2 = Type.Missing;
-            ISegment pSegment = pLine as ISegment;
-            if (m_polyline == null)
-                m_polyline = new PolylineClass();
-            m_polyline.AddSegment(pSegment, ref Missing1, ref Missing2);
-            int tttt = m_polyline.SegmentCount;
-
-            //刷新
-            pEnvelope.Expand(0.9, 0.9, true);
-            pActiveView.Extent = pEnvelope;
-            pActiveView.Refresh();
-
-            //三维
-            //获得现场的相机
-            ICamera pCamera = this.axSceneControl1.Camera as ICamera;
-
-            //拓宽视野
-            double dAngle;
-            dAngle = pCamera.ViewFieldAngle;
-            pCamera.ViewFieldAngle = dAngle * 0.9;
-
-            //重绘现场
-            ISceneViewer pSceneViewer = this.axSceneControl1.SceneGraph.ActiveViewer as ISceneViewer;
-            pSceneViewer.Redraw(false);
-
-        }
+      
 
         private void axSceneControl1_OnMouseUp(object sender, ESRI.ArcGIS.Controls.ISceneControlEvents_OnMouseUpEvent e)
         {

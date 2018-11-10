@@ -125,7 +125,9 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_showGrave.cs" />
+    <Compile Include="Form_showGrave.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form_showGrave.Designer.cs">
       <DependentUpon>Form_showGrave.cs</DependentUpon>
     </Compile>
@@ -135,6 +137,7 @@
     <Compile Include="DjRoute.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
