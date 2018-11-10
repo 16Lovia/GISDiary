@@ -285,5 +285,9 @@ namespace GISDiary
         }
         #endregion
 
+        private void axLicenseControl2_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

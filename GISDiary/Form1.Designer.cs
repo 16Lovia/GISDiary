@@ -36,13 +36,11 @@ namespace GISDiary
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.axToolbarControl1 = new ESRI.ArcGIS.Controls.AxToolbarControl();
             this.axMapControl1 = new ESRI.ArcGIS.Controls.AxMapControl();
-            this.axLicenseControl2 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.btn_flyPath = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.axSceneControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl2)).BeginInit();
             this.SuspendLayout();
             // 
             // axSceneControl1
@@ -60,7 +58,7 @@ namespace GISDiary
             // axLicenseControl1
             // 
             this.axLicenseControl1.Enabled = true;
-            this.axLicenseControl1.Location = new System.Drawing.Point(483, 0);
+            this.axLicenseControl1.Location = new System.Drawing.Point(0, 384);
             this.axLicenseControl1.Margin = new System.Windows.Forms.Padding(2);
             this.axLicenseControl1.Name = "axLicenseControl1";
             this.axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
@@ -91,15 +89,6 @@ namespace GISDiary
             this.axMapControl1.TabIndex = 4;
             this.axMapControl1.OnMouseDown += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseDownEventHandler(this.axMapControl_2D_OnMouseDown);
             // 
-            // axLicenseControl2
-            // 
-            this.axLicenseControl2.Enabled = true;
-            this.axLicenseControl2.Location = new System.Drawing.Point(910, 0);
-            this.axLicenseControl2.Name = "axLicenseControl2";
-            this.axLicenseControl2.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl2.OcxState")));
-            this.axLicenseControl2.Size = new System.Drawing.Size(32, 32);
-            this.axLicenseControl2.TabIndex = 5;
-            // 
             // btn_flyPath
             // 
             this.btn_flyPath.Location = new System.Drawing.Point(0, 0);
@@ -112,7 +101,6 @@ namespace GISDiary
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1370, 616);
-            this.Controls.Add(this.axLicenseControl2);
             this.Controls.Add(this.axMapControl1);
             this.Controls.Add(this.axToolbarControl1);
             this.Controls.Add(this.axLicenseControl1);
@@ -126,7 +114,6 @@ namespace GISDiary
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -139,6 +126,5 @@ namespace GISDiary
         private ESRI.ArcGIS.Controls.AxToolbarControl axToolbarControl1;
         private System.Windows.Forms.Button btn_flyPath;
         private ESRI.ArcGIS.Controls.AxMapControl axMapControl1;
-        private ESRI.ArcGIS.Controls.AxLicenseControl axLicenseControl2;
     }
 }
