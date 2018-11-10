@@ -60,14 +60,14 @@ namespace GISDiary
 
             //获取几何网络文件路径
             //注意修改此路径为当前存储路径
-            //string strPath = @"res\road_hongshan.mdb";
-            string strPath = @"D:\Riva\study\five\GIS_software\数据和程序\数据和程序\例子数据\Network\us.mdb";
+            string strPath = @"res\road_hongshan.mdb";
+           // string strPath = @"D:\Riva\study\five\GIS_software\数据和程序\数据和程序\例子数据\Network\us.mdb";
             //打开工作空间
             IWorkspaceFactory pWorkspaceFactory = new AccessWorkspaceFactory();
             IFeatureWorkspace pFeatureWorkspace = pWorkspaceFactory.OpenFromFile(strPath, 0) as IFeatureWorkspace;
             //获取要素数据集
             //注意名称的设置要与上面创建保持一致
-            IFeatureDataset pFeatureDataset = pFeatureWorkspace.OpenFeatureDataset("high");
+            IFeatureDataset pFeatureDataset = pFeatureWorkspace.OpenFeatureDataset("road");
 
             //获取network集合
             INetworkCollection pNetWorkCollection = pFeatureDataset as INetworkCollection;
@@ -77,7 +77,7 @@ namespace GISDiary
             //    return;
             //FeatureDataset可能包含多个network，我们获取指定的network
             //注意network的名称的设置要与上面创建保持一致
-            mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("high_net");
+            mGeometricNetwork = pNetWorkCollection.get_GeometricNetworkByName("road_net");
 
             //将Network中的每个要素类作为一个图层加入地图控件
             IFeatureClassContainer pFeatClsContainer = mGeometricNetwork as IFeatureClassContainer;
