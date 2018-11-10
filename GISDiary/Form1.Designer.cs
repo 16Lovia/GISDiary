@@ -35,20 +35,19 @@
             this.axToolbarControl1 = new ESRI.ArcGIS.Controls.AxToolbarControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn_flyPath = new System.Windows.Forms.Button();
-            this.axGlobeControl1 = new ESRI.ArcGIS.Controls.AxGlobeControl();
             ((System.ComponentModel.ISupportInitialize)(this.axSceneControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.axGlobeControl1)).BeginInit();
             this.SuspendLayout();
             // 
             // axSceneControl1
             // 
+            this.axSceneControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.axSceneControl1.Location = new System.Drawing.Point(0, 0);
             this.axSceneControl1.Name = "axSceneControl1";
             this.axSceneControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axSceneControl1.OcxState")));
-            this.axSceneControl1.Size = new System.Drawing.Size(542, 435);
+            this.axSceneControl1.Size = new System.Drawing.Size(1421, 616);
             this.axSceneControl1.TabIndex = 0;
             this.axSceneControl1.OnMouseDown += new ESRI.ArcGIS.Controls.ISceneControlEvents_Ax_OnMouseDownEventHandler(this.axSceneControl1_OnMouseDown);
             // 
@@ -92,20 +91,11 @@
             this.btn_flyPath.UseVisualStyleBackColor = true;
             this.btn_flyPath.Click += new System.EventHandler(this.btn_flyPath_Click);
             // 
-            // axGlobeControl1
-            // 
-            this.axGlobeControl1.Location = new System.Drawing.Point(559, 0);
-            this.axGlobeControl1.Name = "axGlobeControl1";
-            this.axGlobeControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axGlobeControl1.OcxState")));
-            this.axGlobeControl1.Size = new System.Drawing.Size(541, 435);
-            this.axGlobeControl1.TabIndex = 5;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1421, 616);
-            this.Controls.Add(this.axGlobeControl1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.axToolbarControl1);
             this.Controls.Add(this.axLicenseControl1);
@@ -117,7 +107,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).EndInit();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.axGlobeControl1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -130,6 +119,5 @@
         private ESRI.ArcGIS.Controls.AxToolbarControl axToolbarControl1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btn_flyPath;
-        private ESRI.ArcGIS.Controls.AxGlobeControl axGlobeControl1;
     }
 }
