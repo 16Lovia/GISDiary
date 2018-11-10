@@ -58,7 +58,6 @@ namespace GISDiary
             this.axSceneControl1.TabIndex = 0;
             this.axSceneControl1.OnMouseDown += new ESRI.ArcGIS.Controls.ISceneControlEvents_Ax_OnMouseDownEventHandler(this.axSceneControl1_OnMouseDown);
             this.axSceneControl1.OnMouseUp += new ESRI.ArcGIS.Controls.ISceneControlEvents_Ax_OnMouseUpEventHandler(this.axSceneControl1_OnMouseUp);
-            this.axSceneControl1.OnMouseMove += new ESRI.ArcGIS.Controls.ISceneControlEvents_Ax_OnMouseMoveEventHandler(this.axSceneControl1_OnMouseMove);
             // 
             // axLicenseControl1
             // 
@@ -96,14 +95,13 @@ namespace GISDiary
             // 
             // axMapControl1
             // 
-            this.axMapControl1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.axMapControl1.Location = new System.Drawing.Point(710, 28);
+            this.axMapControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.axMapControl1.Location = new System.Drawing.Point(0, 199);
             this.axMapControl1.Name = "axMapControl1";
             this.axMapControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMapControl1.OcxState")));
-            this.axMapControl1.Size = new System.Drawing.Size(232, 409);
+            this.axMapControl1.Size = new System.Drawing.Size(232, 238);
             this.axMapControl1.TabIndex = 4;
             this.axMapControl1.OnMouseDown += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseDownEventHandler(this.axMapControl_2D_OnMouseDown);
-            this.axMapControl1.OnMouseMove += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseMoveEventHandler(this.axMapControl_2D_OnMouseMove);
             // 
             // axLicenseControl2
             // 
