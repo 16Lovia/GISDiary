@@ -287,7 +287,7 @@ namespace GISDiary
                     }
                     else
                     {
-                        dataRow[i] = pFeature.get_Value(i).ToString();
+                       // dataRow[i] = pFeature.get_Value(i).ToString();
                     }
                 }
                 dataTable.Rows.Add(dataRow);
