@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GISDiary", "GISDiary\GISDia
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FControlAll", "..\小试\Test01\FControlAll\FControlAll.csproj", "{6FFC1388-B0D6-4B39-BFDA-AA0D4D382E56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FControlEve", "..\小试\Test01\FControlEve\FControlEve.csproj", "{543ECC35-3976-48EA-814C-0BE243AFA41F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FControlEve", "..\..\Homework\GIS工程设计\test01\FControlEve\FControlEve.csproj", "{543ECC35-3976-48EA-814C-0BE243AFA41F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
