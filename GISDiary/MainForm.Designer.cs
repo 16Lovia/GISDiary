@@ -1,4 +1,6 @@
-﻿namespace GISDiary
+﻿using System.Windows.Forms;
+
+namespace GISDiary
 {
     partial class MainForm
     {
@@ -42,6 +44,8 @@
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.btn_Form1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+           // this.FormBorderStyle = FormBorderStyle.None;     //设置窗体为无边框样式
+            this.WindowState = FormWindowState.Maximized;    //最大化窗体
             ((System.ComponentModel.ISupportInitialize)(this.axToolbarControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axMapControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axTOCControl1)).BeginInit();
