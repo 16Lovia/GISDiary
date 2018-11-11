@@ -62,7 +62,10 @@ namespace GISDiary
         private void axSceneControl1_OnMouseDown(object sender, ESRI.ArcGIS.Controls.ISceneControlEvents_OnMouseDownEvent e)
         {
              ICamera pCamera = this.axSceneControl1.Camera;
-            IPoint point = pCamera.Target;
+
+            IPoint point;
+            //point= pCamera.Target;
+            point = pCamera.Observer;
             IEnvelope pEnv = new EnvelopeClass();
             pEnv.XMax = point.X + 5;
             pEnv.XMin = point.X - 5;
