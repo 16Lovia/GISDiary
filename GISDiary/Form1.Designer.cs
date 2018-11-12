@@ -53,7 +53,6 @@
             this.axGlobeControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axGlobeControl1.OcxState")));
             this.axGlobeControl1.Size = new System.Drawing.Size(1060, 556);
             this.axGlobeControl1.TabIndex = 3;
-        
             // 
             // btn_globe
             // 
@@ -65,7 +64,7 @@
             this.btn_globe.UseVisualStyleBackColor = true;
             this.btn_globe.Click += new System.EventHandler(this.btn_globe_Click);
             // 
-            // Form3
+            // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -73,8 +72,8 @@
             this.Controls.Add(this.btn_globe);
             this.Controls.Add(this.axGlobeControl1);
             this.Controls.Add(this.axLicenseControl1);
-            this.Name = "Form3";
-            this.Text = "Form3";
+            this.Name = "Form1";
+            this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axGlobeControl1)).EndInit();
             this.ResumeLayout(false);
