@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.progressBar6 = new FControlEve.MyProgressBar();
@@ -50,12 +49,10 @@
             this.progressBar2 = new FControlEve.MyProgressBar();
             this.progressBar1 = new FControlEve.MyProgressBar();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.label11);
             this.panel1.Controls.Add(this.label12);
             this.panel1.Controls.Add(this.progressBar6);
@@ -75,35 +72,29 @@
             this.panel1.Controls.Add(this.progressBar3);
             this.panel1.Controls.Add(this.progressBar2);
             this.panel1.Controls.Add(this.progressBar1);
-            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Location = new System.Drawing.Point(2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(491, 274);
+            this.panel1.Size = new System.Drawing.Size(368, 219);
             this.panel1.TabIndex = 0;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackgroundImage = global::FControlEve.Resource1.img1;
-            this.pictureBox1.Location = new System.Drawing.Point(3, 21);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(97, 71);
-            this.pictureBox1.TabIndex = 31;
-            this.pictureBox1.TabStop = false;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(107, 208);
+            this.label11.Location = new System.Drawing.Point(80, 166);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(82, 15);
+            this.label11.Size = new System.Drawing.Size(65, 12);
             this.label11.TabIndex = 30;
             this.label11.Text = "困难指数：";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(422, 210);
+            this.label12.Location = new System.Drawing.Point(316, 168);
+            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(23, 15);
+            this.label12.Size = new System.Drawing.Size(17, 12);
             this.label12.TabIndex = 29;
             this.label12.Text = "06";
             // 
@@ -111,61 +102,68 @@
             // 
             this.progressBar6.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar6.ForeColor = System.Drawing.Color.MediumPurple;
-            this.progressBar6.Location = new System.Drawing.Point(192, 208);
+            this.progressBar6.Location = new System.Drawing.Point(144, 166);
+            this.progressBar6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBar6.Name = "progressBar6";
-            this.progressBar6.Size = new System.Drawing.Size(220, 19);
+            this.progressBar6.Size = new System.Drawing.Size(165, 15);
             this.progressBar6.TabIndex = 28;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(92, 171);
+            this.label10.Location = new System.Drawing.Point(69, 137);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(97, 15);
+            this.label10.Size = new System.Drawing.Size(77, 12);
             this.label10.TabIndex = 27;
             this.label10.Text = "金手指程度：";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(107, 134);
+            this.label9.Location = new System.Drawing.Point(80, 107);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(82, 15);
+            this.label9.Size = new System.Drawing.Size(65, 12);
             this.label9.TabIndex = 26;
             this.label9.Text = "地势影响：";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(112, 96);
+            this.label8.Location = new System.Drawing.Point(84, 77);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(76, 15);
+            this.label8.Size = new System.Drawing.Size(59, 12);
             this.label8.TabIndex = 25;
             this.label8.Text = "Bug数量：";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(106, 62);
+            this.label7.Location = new System.Drawing.Point(80, 50);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(82, 15);
+            this.label7.Size = new System.Drawing.Size(65, 12);
             this.label7.TabIndex = 24;
             this.label7.Text = "死伤系数：";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(106, 24);
+            this.label6.Location = new System.Drawing.Point(80, 19);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(82, 15);
+            this.label6.Size = new System.Drawing.Size(65, 12);
             this.label6.TabIndex = 23;
             this.label6.Text = "遭遇时长：";
             // 
             // btnCount
             // 
-            this.btnCount.Location = new System.Drawing.Point(407, 233);
+            this.btnCount.Location = new System.Drawing.Point(305, 186);
+            this.btnCount.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCount.Name = "btnCount";
-            this.btnCount.Size = new System.Drawing.Size(75, 23);
+            this.btnCount.Size = new System.Drawing.Size(56, 18);
             this.btnCount.TabIndex = 22;
             this.btnCount.Text = "Show";
             this.btnCount.UseVisualStyleBackColor = true;
@@ -174,45 +172,50 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(422, 173);
+            this.label5.Location = new System.Drawing.Point(316, 138);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(23, 15);
+            this.label5.Size = new System.Drawing.Size(17, 12);
             this.label5.TabIndex = 21;
             this.label5.Text = "05";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(422, 134);
+            this.label4.Location = new System.Drawing.Point(316, 107);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(23, 15);
+            this.label4.Size = new System.Drawing.Size(17, 12);
             this.label4.TabIndex = 20;
             this.label4.Text = "04";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(422, 97);
+            this.label3.Location = new System.Drawing.Point(316, 78);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(23, 15);
+            this.label3.Size = new System.Drawing.Size(17, 12);
             this.label3.TabIndex = 19;
             this.label3.Text = "03";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(422, 60);
+            this.label2.Location = new System.Drawing.Point(316, 48);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(23, 15);
+            this.label2.Size = new System.Drawing.Size(17, 12);
             this.label2.TabIndex = 18;
             this.label2.Text = "02";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(422, 22);
+            this.label1.Location = new System.Drawing.Point(316, 18);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 15);
+            this.label1.Size = new System.Drawing.Size(17, 12);
             this.label1.TabIndex = 17;
             this.label1.Text = "01";
             // 
@@ -220,57 +223,62 @@
             // 
             this.progressBar5.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar5.ForeColor = System.Drawing.Color.SpringGreen;
-            this.progressBar5.Location = new System.Drawing.Point(192, 171);
+            this.progressBar5.Location = new System.Drawing.Point(144, 137);
+            this.progressBar5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBar5.Name = "progressBar5";
-            this.progressBar5.Size = new System.Drawing.Size(220, 19);
+            this.progressBar5.Size = new System.Drawing.Size(165, 15);
             this.progressBar5.TabIndex = 4;
             // 
             // progressBar4
             // 
             this.progressBar4.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar4.ForeColor = System.Drawing.Color.LightGreen;
-            this.progressBar4.Location = new System.Drawing.Point(192, 134);
+            this.progressBar4.Location = new System.Drawing.Point(144, 107);
+            this.progressBar4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBar4.Name = "progressBar4";
-            this.progressBar4.Size = new System.Drawing.Size(220, 18);
+            this.progressBar4.Size = new System.Drawing.Size(165, 14);
             this.progressBar4.TabIndex = 3;
             // 
             // progressBar3
             // 
             this.progressBar3.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar3.ForeColor = System.Drawing.Color.LimeGreen;
-            this.progressBar3.Location = new System.Drawing.Point(192, 59);
+            this.progressBar3.Location = new System.Drawing.Point(144, 47);
+            this.progressBar3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBar3.Name = "progressBar3";
-            this.progressBar3.Size = new System.Drawing.Size(220, 18);
+            this.progressBar3.Size = new System.Drawing.Size(165, 14);
             this.progressBar3.TabIndex = 2;
             // 
             // progressBar2
             // 
             this.progressBar2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar2.ForeColor = System.Drawing.Color.DarkOliveGreen;
-            this.progressBar2.Location = new System.Drawing.Point(192, 96);
+            this.progressBar2.Location = new System.Drawing.Point(144, 77);
+            this.progressBar2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(220, 19);
+            this.progressBar2.Size = new System.Drawing.Size(165, 15);
             this.progressBar2.TabIndex = 1;
             // 
             // progressBar1
             // 
             this.progressBar1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar1.ForeColor = System.Drawing.Color.DarkGreen;
-            this.progressBar1.Location = new System.Drawing.Point(192, 21);
+            this.progressBar1.Location = new System.Drawing.Point(144, 17);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(220, 19);
+            this.progressBar1.Size = new System.Drawing.Size(165, 15);
             this.progressBar1.TabIndex = 0;
             // 
             // DifficultyEve
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "DifficultyEve";
-            this.Size = new System.Drawing.Size(511, 297);
+            this.Size = new System.Drawing.Size(383, 238);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -296,6 +304,5 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

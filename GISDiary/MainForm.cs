@@ -201,7 +201,7 @@ namespace GISDiary
             IPolyline ipPolyResult = m_ipPathFinder.PathPolyLine();//最后返回最短路径
 
         }
-        
+
         //-----------------------------------
         /// <summary>
         /// //墓穴展示
@@ -215,7 +215,13 @@ namespace GISDiary
 
         [DllImport("user32")]
         public static extern int SetParent(int hWndChild, int hWndNewParent);
-
+        public static int longitude;//public类型的实例字段  /********************/
+                                    //关闭子窗口
+        private void CloseGrave(object sender, ElapsedEventArgs e)
+        {
+            Form_showGrave fn = new Form_showGrave();
+            fn.Close();
+        }
         private void showGrave()
         {
 
@@ -223,14 +229,19 @@ namespace GISDiary
 
             //子窗体展示
             Form_showGrave fn = new Form_showGrave();
+            longitude = 117;/*****************/
             fn.MdiParent = this;
             fn.StartPosition = FormStartPosition.CenterScreen;
             fn.Show();
             SetParent((int)fn.Handle, (int)this.Handle);
 
-
+            //一段时间后关闭
+             System.Timers.Timer t = new System.Timers.Timer(20);//10000ms空隙
+             t.Elapsed += new System.Timers.ElapsedEventHandler(CloseGrave);//调用函数
+             t.AutoReset = false;//是否循环调用
+             t.Enabled= true;//是否调用
         }
-
+       
         private void btn_show_Click(object sender, EventArgs e)
         {
             showGrave();
@@ -259,8 +270,9 @@ namespace GISDiary
 
         private void btn_video_Click(object sender, EventArgs e)
         {
-            //System.Timers.Timer t = new System.Timers.Timer(10000);//10000ms空隙
+            
             axWindowsMediaPlayer1.URL = @"res\3d.mp4";//连接视频
+            //System.Timers.Timer t = new System.Timers.Timer(10000);//10000ms空隙
            // t.Elapsed += new System.Timers.ElapsedEventHandler(Load3D);//调用函数
            // t.AutoReset = false;//是否循环调用
            // t.Enabled= true;//是否调用
@@ -273,7 +285,7 @@ namespace GISDiary
             if ((int)axWindowsMediaPlayer1.playState == 1)
             {
                 //停顿2秒钟再重新播放  
-                //System.Threading.Thread.Sleep(200);
+                System.Threading.Thread.Sleep(200);
                 //重新播放  
                 //windowsMediaPlay.Ctlcontrols.play();
                 string file2d = @"res\china\china.mxd";
