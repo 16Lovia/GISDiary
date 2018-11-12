@@ -29,6 +29,13 @@ namespace GISDiary
             ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);
           
             InitializeComponent();
+          //  this.skinEngine1 = new Sunisoft.IrisSkin.SkinEngine(((System.ComponentModel.Component)(this)));
+           // this.skinEngine1.SkinFile = Application.StartupPath + "//EighteenColor2.ssk";
+            
+           // this.skinEngine1.SkinFile = Application.StartupPath + "//WaveColor2.ssk";
+            //Sunisoft.IrisSkin.SkinEngine se = null;
+            //se = new Sunisoft.IrisSkin.SkinEngine();
+            //se.SkinAllForm = true;
             this.MouseWheel += new MouseEventHandler(this.axSceneControl_OnMouseWheel);
         }
 
@@ -253,7 +260,7 @@ namespace GISDiary
         private void btn_video_Click(object sender, EventArgs e)
         {
             //System.Timers.Timer t = new System.Timers.Timer(10000);//10000ms空隙
-            axWindowsMediaPlayer1.URL = @"res\VID_20181018_143314.mp4";//连接视频
+            axWindowsMediaPlayer1.URL = @"res\3d.mp4";//连接视频
            // t.Elapsed += new System.Timers.ElapsedEventHandler(Load3D);//调用函数
            // t.AutoReset = false;//是否循环调用
            // t.Enabled= true;//是否调用
@@ -269,7 +276,7 @@ namespace GISDiary
                 //System.Threading.Thread.Sleep(200);
                 //重新播放  
                 //windowsMediaPlay.Ctlcontrols.play();
-                string file2d = @"res\China.mxd";
+                string file2d = @"res\china\china.mxd";
                 axMapControl1.LoadMxFile(file2d);
                 axMapControl1.Extent = axMapControl1.FullExtent;
                 string file3d = @"res\china3d\china3d.sxd";
@@ -279,7 +286,7 @@ namespace GISDiary
             }
             else if ((int)axWindowsMediaPlayer1.playState == 3)
             {
-                axWindowsMediaPlayer1.fullScreen = true;
+                //axWindowsMediaPlayer1.fullScreen = true;
             }
         }
 
@@ -336,6 +343,93 @@ namespace GISDiary
             pGra.AddElement((IElement)pFillShapeEle, 0);
             // 刷新鹰眼
             pAv.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //子窗体展示
+            Form2 f2 = new Form2();
+            f2.MdiParent = this;
+            f2.StartPosition = FormStartPosition.CenterScreen;
+            f2.Show();
+            SetParent((int)f2.Handle, (int)this.Handle);
+        }
+
+        private void axMapControl1_OnExtentUpdated(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnExtentUpdatedEvent e)
+        {
+            //得到接口
+            IActiveView pActiveView = this.axMapControl1.Map as IActiveView;
+
+            //获得显示范围
+            IEnvelope pEnvelope = (IEnvelope)pActiveView.Extent;
+
+            //刷新
+           
+            IPoint pointcenter;
+          //  pointcenter.X = (pEnvelope.XMax - pEnvelope.XMin) / 2;
+        //    pointcenter.Y = (pEnvelope.YMax - pEnvelope.YMin) / 2;
+
+            pEnvelope.Expand(0.9, 0.9, true);
+            pActiveView.Extent = pEnvelope;
+            pActiveView.Refresh();
+
+
+       
+            ICamera pCamera = this.axSceneControl1.Camera;
+            IPoint point = pCamera.Target;
+            IEnvelope pEnv = new EnvelopeClass();
+            pEnv.XMax = point.X + 2;
+            pEnv.XMin = point.X - 2;
+            pEnv.YMax = point.Y + 2;
+            pEnv.YMin = point.Y - 2;
+
+            IRectangleElement pRectangleEle = new RectangleElementClass();
+            IElement pEle = pRectangleEle as IElement;
+            pEle.Geometry = pEnv;
+
+            //设置线框的边线对象，包括颜色和线宽
+            IRgbColor pColor = new RgbColorClass();
+            pColor.Red = 238;
+            pColor.Green = 99;
+            pColor.Blue = 99;
+            pColor.Transparency = 255;
+            // 产生一个线符号对象 
+            ILineSymbol pOutline = new SimpleLineSymbolClass();
+            pOutline.Width = 1;
+            pOutline.Color = pColor;
+
+            // 设置颜色属性 
+            pColor.Red = 238;
+            pColor.Green = 99;
+            pColor.Blue = 99;
+            pColor.Transparency = 0;
+
+            // 设置线框填充符号的属性 
+            IFillSymbol pFillSymbol = new SimpleFillSymbolClass();
+            pFillSymbol.Color = pColor;
+            pFillSymbol.Outline = pOutline;
+            IFillShapeElement pFillShapeEle = pEle as IFillShapeElement;
+            pFillShapeEle.Symbol = pFillSymbol;
+
+            // 得到鹰眼视图中的图形元素容器
+            IGraphicsContainer pGra = axMapControl1.Map as IGraphicsContainer;
+            IActiveView pAv = pGra as IActiveView;
+            // 在绘制前，清除 axMapControl1 中的任何图形元素 
+            pGra.DeleteAllElements();
+            // 鹰眼视图中添加线框
+            pGra.AddElement((IElement)pFillShapeEle, 0);
+            // 刷新鹰眼
+            pAv.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //子窗体展示
+            Form_Full f2 = new Form_Full();
+            f2.MdiParent = this;
+            f2.StartPosition = FormStartPosition.CenterScreen;
+            f2.Show();
+            SetParent((int)f2.Handle, (int)this.Handle);
         }
     }
 }

@@ -46,6 +46,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.difficultyEve1 = new FControlEve.DifficultyEve();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -210,11 +211,20 @@
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
+            // difficultyEve1
+            // 
+            this.difficultyEve1.Location = new System.Drawing.Point(140, 32);
+            this.difficultyEve1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.difficultyEve1.Name = "difficultyEve1";
+            this.difficultyEve1.Size = new System.Drawing.Size(383, 238);
+            this.difficultyEve1.TabIndex = 7;
+            // 
             // Form_showGrave
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(913, 500);
+            this.Controls.Add(this.difficultyEve1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -252,5 +262,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
+        private FControlEve.DifficultyEve difficultyEve1;
     }
 }
