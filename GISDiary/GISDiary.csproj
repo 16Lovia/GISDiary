@@ -143,10 +143,8 @@
     <Compile Include="Form_showGrave.Designer.cs">
       <DependentUpon>Form_showGrave.cs</DependentUpon>
     </Compile>
-    <Compile Include="NetWork.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DjRoute.cs" />
     <EmbeddedResource Include="Form0.resx">
       <DependentUpon>Form0.cs</DependentUpon>
     </EmbeddedResource>

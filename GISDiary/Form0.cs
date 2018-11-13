@@ -81,5 +81,15 @@ namespace GISDiary
             f4.Show();
             SetParent((int)f4.Handle, (int)this.Handle);
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //路径分析
+            Form5 f5 = new Form5();
+            f5.MdiParent = this;
+            f5.StartPosition = FormStartPosition.CenterScreen;
+            f5.Show();
+            SetParent((int)f5.Handle, (int)this.Handle);
+        }
     }
 }
