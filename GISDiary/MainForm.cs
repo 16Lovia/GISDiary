@@ -264,14 +264,8 @@ namespace GISDiary
         private void showForm()
         {
 
-            //十字丝定位放大
 
-            //子窗体展示
-            Form1 f1 = new Form1();
-            f1.MdiParent = this;
-            f1.StartPosition = FormStartPosition.CenterScreen;
-            f1.Show();
-            SetParent((int)f1.Handle, (int)this.Handle);
+      
 
 
         }

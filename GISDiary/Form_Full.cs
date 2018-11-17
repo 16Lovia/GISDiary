@@ -111,7 +111,8 @@ namespace GISDiary
       
         private void Form_Full_Load(object sender, EventArgs e)
         {
-             string file2d = @"res\china\china_1.mxd";
+           // string file2d = @"res\china\china_1.mxd";
+            string file2d = @"res\usa.mxd";
             axMapControl1.LoadMxFile(file2d);
             axMapControl1.Extent = axMapControl1.FullExtent;
             //string file3d = @"res\china3d\china3d.sxd";
