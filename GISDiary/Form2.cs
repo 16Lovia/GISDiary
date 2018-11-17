@@ -819,7 +819,7 @@ namespace GISDiary
                                         {
                                 //value = pixels.GetValue(i, j);
 
-                                //if (Convert.ToInt32(value) == 0)
+                                ////if (Convert.ToInt32(value) == 0)
                                 //{
                                 //设置像素的颜色值
                                 temp = PixelValue1[i, j] + PixelValue2[i, j];
