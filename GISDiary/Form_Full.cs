@@ -106,34 +106,19 @@ namespace GISDiary
             {
             }
         }
-        private void VideoClose()
-        {
-            this.videoclose(false);
-        }
+  
 
-        delegate void SetVisibleCore(bool videostate);
-        private void videoclose(bool videostate)
-        {
-            if (this.axWindowsMediaPlayer1.InvokeRequired)
-            {
-
-                SetVisibleCore v = new SetVisibleCore(videoclose);
-                this.Invoke(v, new object[] { videostate });
-
-            }
-            else
-            {
-
-                this.axWindowsMediaPlayer1.Visible = videostate;
-            }
-        }
+      
         private void Form_Full_Load(object sender, EventArgs e)
         {
-            string file2d = @"res\china\china.mxd";
+             string file2d = @"res\china\china_1.mxd";
             axMapControl1.LoadMxFile(file2d);
             axMapControl1.Extent = axMapControl1.FullExtent;
             //string file3d = @"res\china3d\china3d.sxd";
-           // axSceneControl1.LoadSxFile(file3d);
+            //axSceneControl1.LoadSxFile(file3d);
+            //string file2d_1 = @"res\china\china_1.mxd";
+            //axMapControl2.LoadMxFile(file2d_1);
+            ////axMapControl2.Extent = axMapControl1.FullExtent;
         }
 
         private void axMapControl1_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)
@@ -143,44 +128,122 @@ namespace GISDiary
                 //记录鼠标点击的点
                 IPoint pNewPoint = new PointClass();
                 pNewPoint.PutCoords(e.mapX, e.mapY);
-
+            
             }
             //this.axMapControl1.Extent = this.axMapControl1.TrackRectangle();
             else if (e.button == 2)//右键
                 this.axMapControl1.Pan();
         }
 
-        private void axWindowsMediaPlayer1_Enter(object sender, EventArgs e)
-        {
-            
+        private void axMapControl1_OnExtentUpdated(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnExtentUpdatedEvent e)
+        {         
+            //创建鹰眼中线框
+            IEnvelope pEnv = (IEnvelope)e.newEnvelope;
+            IRectangleElement pRectangleEle = new RectangleElementClass();
+            IElement pEle = pRectangleEle as IElement;
+            pEle.Geometry = pEnv;
+
+            //设置线框的边线对象，包括颜色和线宽
+            IRgbColor pColor = new RgbColorClass();
+            pColor.Red = 255;
+            pColor.Green = 0;
+            pColor.Blue = 0;
+            pColor.Transparency = 255;
+            // 产生一个线符号对象 
+            ILineSymbol pOutline = new SimpleLineSymbolClass();
+            pOutline.Width = 2;
+            pOutline.Color = pColor;
+
+            // 设置颜色属性 
+            pColor.Red = 255;
+            pColor.Green = 0;
+            pColor.Blue = 0;
+            pColor.Transparency = 0;
+
+            // 设置线框填充符号的属性 
+            IFillSymbol pFillSymbol = new SimpleFillSymbolClass();
+            pFillSymbol.Color = pColor;
+            pFillSymbol.Outline = pOutline;
+            IFillShapeElement pFillShapeEle = pEle as IFillShapeElement;
+            pFillShapeEle.Symbol = pFillSymbol;
+
+            // 得到鹰眼视图中的图形元素容器
+            IGraphicsContainer pGra = axMapControl2.Map as IGraphicsContainer;
+            IActiveView pAv = pGra as IActiveView;
+            // 在绘制前，清除 axMapControl2 中的任何图形元素 
+            pGra.DeleteAllElements();
+            // 鹰眼视图中添加线框
+            pGra.AddElement((IElement)pFillShapeEle, 0);
+            // 刷新鹰眼
+            pAv.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
 
         }
-        private Thread videothread;
-        private void axWindowsMediaPlayer1_StatusChange(object sender, EventArgs e)
+
+        private void axMapControl2_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)
         {
-            //判断视频是否已停止播放  
-            if ((int)axWindowsMediaPlayer1.playState == 1)
+            // 按下鼠标左键移动矩形框 
+            if (e.button == 1)
             {
-                //停顿2秒钟再重新播放  
-                //System.Threading.Thread.Sleep(200);
-                //重新播放  
-                //windowsMediaPlay.Ctlcontrols.play();
-                this.videothread = new Thread(new ThreadStart(this.VideoClose)); //另开线程安全改变控件可见性
-                this.videothread.Start();
+                IPoint pPoint = new PointClass();
+                pPoint.PutCoords(e.mapX, e.mapY);
+                IEnvelope pEnvelope = this.axMapControl1.Extent;
+                pEnvelope.CenterAt(pPoint);
+                this.axMapControl1.Extent = pEnvelope;
+                this.axMapControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
             }
-            else if ((int)axWindowsMediaPlayer1.playState == 3)
+            // 按下鼠标右键绘制矩形框 
+            else if (e.button == 2)
             {
-                axWindowsMediaPlayer1.fullScreen = true;
+                IEnvelope pEnvelop = this.axMapControl2.TrackRectangle();
+                this.axMapControl1.Extent = pEnvelop;
+                this.axMapControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void axMapControl2_OnMouseMove(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseMoveEvent e)
         {
-            //System.Timers.Timer t = new System.Timers.Timer(10000);//10000ms空隙
-            axWindowsMediaPlayer1.URL = @"res\3d.mp4";//连接视频
-                                                      // t.Elapsed += new System.Timers.ElapsedEventHandler(Load3D);//调用函数
-                                                      // t.AutoReset = false;//是否循环调用
-                                                      // t.Enabled= true;//是否调用
+            // 如果不是左键按下就直接返回 
+            if (e.button != 1) return;
+            IPoint pPoint = new PointClass();
+            pPoint.PutCoords(e.mapX, e.mapY);
+            this.axMapControl1.CenterAt(pPoint);
+            this.axMapControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
+
+        }
+        private ILayer GetOverviewLayer(IMap map)
+        {
+            //获取主视图的第一个图层
+            ILayer pLayer = map.get_Layer(0);
+            //遍历其他图层，并比较视图范围的宽度，返回宽度最大的图层
+            ILayer pTempLayer = null;
+            for (int i = 1; i < map.LayerCount; i++)
+            {
+                pTempLayer = map.get_Layer(i);
+                if (pLayer.AreaOfInterest.Width < pTempLayer.AreaOfInterest.Width)
+                    pLayer = pTempLayer;
+            }
+            return pLayer;
+        }
+
+        private void axMapControl1_OnMapReplaced(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMapReplacedEvent e)
+        {
+            //获取鹰眼图层
+            this.axMapControl2.AddLayer(this.GetOverviewLayer(this.axMapControl1.Map));
+            //设置 MapControl 显示范围至数据的全局范围
+            this.axMapControl2.Extent = this.axMapControl1.FullExtent;
+            // 刷新鹰眼控件地图
+             this.axMapControl2.Refresh();
+
+        }
+
+        private void axMapControl1_OnFullExtentUpdated(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnFullExtentUpdatedEvent e)
+        {
+            //获取鹰眼图层
+            this.axMapControl2.AddLayer(this.GetOverviewLayer(this.axMapControl1.Map));
+            // 设置 MapControl 显示范围至数据的全局范围
+            this.axMapControl2.Extent = this.axMapControl1.FullExtent;
+            // 刷新鹰眼控件地图
+            this.axMapControl2.Refresh();
         }
     }
 }
