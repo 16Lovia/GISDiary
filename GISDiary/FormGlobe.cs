@@ -17,9 +17,9 @@ using System.Windows.Forms;
 
 namespace GISDiary
 {
-    public partial class Form1 : Form
+    public partial class FormGlobe : Form
     {
-        public Form1()
+        public FormGlobe()
         {
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
             ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);

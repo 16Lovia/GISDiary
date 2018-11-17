@@ -19,9 +19,9 @@ using System.Collections;
 
 namespace GISDiary
 {
-    public partial class Form0 : Form
+    public partial class FormStart : Form
     {
-        public Form0()
+        public FormStart()
         {
             InitializeComponent();
         }
@@ -39,7 +39,7 @@ namespace GISDiary
         private void button1_Click(object sender, EventArgs e)
         {
             //Globe动画
-            Form1 f1 = new Form1();
+            FormGlobe f1 = new FormGlobe();
             f1.MdiParent = this;
             f1.StartPosition = FormStartPosition.CenterScreen;
             f1.Show();
@@ -64,11 +64,11 @@ namespace GISDiary
         private void button3_Click(object sender, EventArgs e)
         {
             //难度展示
-            Form3 f3= new Form3();
-            f3.MdiParent = this;
-            f3.StartPosition = FormStartPosition.CenterScreen;
-            f3.Show();
-            SetParent((int)f3.Handle, (int)this.Handle);
+            //Form3 f3= new Form3();
+            //f3.MdiParent = this;
+            //f3.StartPosition = FormStartPosition.CenterScreen;
+            //f3.Show();
+            //SetParent((int)f3.Handle, (int)this.Handle);
 
         }
 
@@ -85,7 +85,7 @@ namespace GISDiary
         private void button5_Click(object sender, EventArgs e)
         {
             //路径分析
-            Form5 f5 = new Form5();
+            FormRoute f5 = new FormRoute();
             f5.MdiParent = this;
             f5.StartPosition = FormStartPosition.CenterScreen;
             f5.Show();

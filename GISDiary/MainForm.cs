@@ -87,7 +87,7 @@ namespace GISDiary
         private void button1_Click(object sender, EventArgs e)
         {
 
-            Form1 f3 = new Form1();
+            FormGlobe f3 = new FormGlobe();
             f3.MdiParent = this;
             f3.StartPosition = FormStartPosition.CenterScreen;
             f3.Show();

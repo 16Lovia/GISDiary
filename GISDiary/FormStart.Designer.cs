@@ -1,6 +1,6 @@
 ﻿namespace GISDiary
 {
-    partial class Form0
+    partial class FormStart
     {
         /// <summary>
         /// Required designer variable.

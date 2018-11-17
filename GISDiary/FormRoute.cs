@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace GISDiary
 {
-    public partial class Form5 : Form
+    public partial class FormRoute : Form
     {
-        public Form5()
+        public FormRoute()
         {
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
             ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);

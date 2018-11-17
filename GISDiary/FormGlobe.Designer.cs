@@ -1,6 +1,6 @@
 ﻿namespace GISDiary
 {
-    partial class Form1
+    partial class FormGlobe
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGlobe));
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.axGlobeControl1 = new ESRI.ArcGIS.Controls.AxGlobeControl();
             this.btn_globe = new System.Windows.Forms.Button();
