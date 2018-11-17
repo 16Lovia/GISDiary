@@ -173,34 +173,34 @@ namespace GISDiary
 
 
         //方法2
-        private NetWork m_ipPathFinder;
+       // private NetWork m_ipPathFinder;
         private Thread videothread;
 
-        private void NetRoad()
-        {
-            // 备注：在调用该类时的次序
+        //private void NetRoad()
+        //{
+        //    // 备注：在调用该类时的次序
 
-            //if (m_ipPathFinder == null)//打开几何网络工作空间
-            //{
-            //    m_ipPathFinder.m_ipMap = this.axMapControl1.ActiveView.FocusMap;
-            //    ILayer ipLayer = m_ipPathFinder.m_ipMap.get_Layer(1);
-            //    IFeatureLayer ipFeatureLayer = ipLayer as IFeatureLayer;
-            //    IFeatureDataset ipFDB = ipFeatureLayer.FeatureClass.FeatureDataset;
-            //    m_ipPathFinder.SetOrGetMap = m_ipPathFinder.m_ipMap;
-            //    m_ipPathFinder.OpenFeatureDatasetNetwork(ipFDB);
-            //}
-            m_ipPathFinder.m_ipMap = this.axMapControl1.ActiveView.FocusMap;
-            ILayer ipLayer = m_ipPathFinder.m_ipMap.get_Layer(0);
-            IFeatureLayer ipFeatureLayer = ipLayer as IFeatureLayer;
-            IFeatureDataset ipFDB = ipFeatureLayer.FeatureClass.FeatureDataset;
-            m_ipPathFinder.SetOrGetMap = m_ipPathFinder.m_ipMap;
-            m_ipPathFinder.OpenFeatureDatasetNetwork(ipFDB);
-            //m_ipPathFinder.m_ipPoints = mPointCollection;
-            m_ipPathFinder.SolvePath("length");//先解析路径
+        //    //if (m_ipPathFinder == null)//打开几何网络工作空间
+        //    //{
+        //    //    m_ipPathFinder.m_ipMap = this.axMapControl1.ActiveView.FocusMap;
+        //    //    ILayer ipLayer = m_ipPathFinder.m_ipMap.get_Layer(1);
+        //    //    IFeatureLayer ipFeatureLayer = ipLayer as IFeatureLayer;
+        //    //    IFeatureDataset ipFDB = ipFeatureLayer.FeatureClass.FeatureDataset;
+        //    //    m_ipPathFinder.SetOrGetMap = m_ipPathFinder.m_ipMap;
+        //    //    m_ipPathFinder.OpenFeatureDatasetNetwork(ipFDB);
+        //    //}
+        //    m_ipPathFinder.m_ipMap = this.axMapControl1.ActiveView.FocusMap;
+        //    ILayer ipLayer = m_ipPathFinder.m_ipMap.get_Layer(0);
+        //    IFeatureLayer ipFeatureLayer = ipLayer as IFeatureLayer;
+        //    IFeatureDataset ipFDB = ipFeatureLayer.FeatureClass.FeatureDataset;
+        //    m_ipPathFinder.SetOrGetMap = m_ipPathFinder.m_ipMap;
+        //    m_ipPathFinder.OpenFeatureDatasetNetwork(ipFDB);
+        //    //m_ipPathFinder.m_ipPoints = mPointCollection;
+        //    m_ipPathFinder.SolvePath("length");//先解析路径
 
-            IPolyline ipPolyResult = m_ipPathFinder.PathPolyLine();//最后返回最短路径
+        //    IPolyline ipPolyResult = m_ipPathFinder.PathPolyLine();//最后返回最短路径
 
-        }
+        //}
 
         //-----------------------------------
         /// <summary>

@@ -15,7 +15,7 @@ using ESRI.ArcGIS.Display;
 using System.Runtime.InteropServices;
 using ESRI.ArcGIS.NetworkAnalyst;
 using System.Collections;
-
+using System.Threading;
 
 namespace GISDiary
 {
@@ -52,24 +52,24 @@ namespace GISDiary
         private void button2_Click(object sender, EventArgs e)
         {
             //总体展示
-            MainForm f2 = new MainForm();
-            f2.MdiParent = this;
-            f2.StartPosition = FormStartPosition.CenterScreen;
-            f2.Show();
-            SetParent((int)f2.Handle, (int)this.Handle);
-
+            //MainForm f2 = new MainForm();
+            //f2.MdiParent = this;
+            //f2.StartPosition = FormStartPosition.CenterScreen;
+            //f2.Show();
+            //SetParent((int)f2.Handle, (int)this.Handle);
+            axWindowsMediaPlayer1.URL = @"res\3d.mp4";//连接视频
 
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             //难度展示
-            //Form3 f3= new Form3();
-            //f3.MdiParent = this;
-            //f3.StartPosition = FormStartPosition.CenterScreen;
-            //f3.Show();
-            //SetParent((int)f3.Handle, (int)this.Handle);
-            //tt
+            Form_difficluty f3 = new Form_difficluty();
+            f3.MdiParent = this;
+            f3.StartPosition = FormStartPosition.CenterScreen;
+            f3.Show();
+            SetParent((int)f3.Handle, (int)this.Handle);
+
 
         }
 
@@ -91,6 +91,58 @@ namespace GISDiary
             f5.StartPosition = FormStartPosition.CenterScreen;
             f5.Show();
             SetParent((int)f5.Handle, (int)this.Handle);
+        }
+        private Thread videothread;
+
+        private void VideoClose()
+        {
+            this.videoclose(false);
+        }
+
+        delegate void SetVisibleCore(bool videostate);
+        private void videoclose(bool videostate)
+        {
+            if (this.axWindowsMediaPlayer1.InvokeRequired)
+            {
+
+                SetVisibleCore v = new SetVisibleCore(videoclose);
+                this.Invoke(v, new object[] { videostate });
+
+            }
+            else
+            {
+
+                this.axWindowsMediaPlayer1.Visible = videostate;
+            }
+        }
+        private void axWindowsMediaPlayer1_StatusChange(object sender, EventArgs e)
+        {
+            //判断视频是否已停止播放  
+            if ((int)axWindowsMediaPlayer1.playState == 1)
+            {
+                //重新播放  
+                //windowsMediaPlay.Ctlcontrols.play();
+                this.videothread = new Thread(new ThreadStart(this.VideoClose)); //另开线程安全改变控件可见性
+                this.videothread.Start();
+
+                System.Threading.Thread.Sleep(200);//停顿2秒钟  
+                //子窗体展示
+                Form_Full f1 = new Form_Full();
+                f1.MdiParent = this;
+                f1.StartPosition = FormStartPosition.CenterScreen;
+                f1.Show();
+                SetParent((int)f1.Handle, (int)this.Handle);
+                //string file2d = @"res\china\china.mxd";
+                //axMapControl1.LoadMxFile(file2d);
+                //axMapControl1.Extent = axMapControl1.FullExtent;
+                // string file3d = @"res\china3d\china3d.sxd";
+                //axSceneControl1.LoadSxFile(file3d);
+
+            }
+            else if ((int)axWindowsMediaPlayer1.playState == 3)
+            {
+                axWindowsMediaPlayer1.fullScreen = true;
+            }
         }
     }
 }
