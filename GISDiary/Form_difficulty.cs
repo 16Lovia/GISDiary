@@ -27,11 +27,13 @@ using ESRI.ArcGIS.GeoAnalyst;
 
 namespace GISDiary
 {
-    public partial class Form_difficluty : Form
+    public partial class Form_difficulty : Form
     {
         //  private string tiffPath = "D:\\users\\lenovo\\documents\\visual studio 2015\\Projects\\Teamwork\\Teamwork\\raster\\last.tif";
-        public Form_difficluty()
+        public Form_difficulty()
         {
+            ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
+            ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);
             InitializeComponent();
         }
 

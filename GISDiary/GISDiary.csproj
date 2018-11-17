@@ -129,11 +129,11 @@
     <Compile Include="FormStart.Designer.cs">
       <DependentUpon>FormStart.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_difficluty.cs">
+    <Compile Include="Form_difficulty.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_difficluty.Designer.cs">
-      <DependentUpon>Form_difficluty.cs</DependentUpon>
+    <Compile Include="Form_difficulty.Designer.cs">
+      <DependentUpon>Form_difficulty.cs</DependentUpon>
     </Compile>
     <Compile Include="Form_Full.cs">
       <SubType>Form</SubType>
@@ -164,8 +164,8 @@
     <EmbeddedResource Include="FormStart.resx">
       <DependentUpon>FormStart.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_difficluty.resx">
-      <DependentUpon>Form_difficluty.cs</DependentUpon>
+    <EmbeddedResource Include="Form_difficulty.resx">
+      <DependentUpon>Form_difficulty.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Full.resx">
       <DependentUpon>Form_Full.cs</DependentUpon>

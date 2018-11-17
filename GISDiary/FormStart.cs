@@ -52,19 +52,19 @@ namespace GISDiary
         private void button2_Click(object sender, EventArgs e)
         {
             //总体展示
-            //MainForm f2 = new MainForm();
-            //f2.MdiParent = this;
-            //f2.StartPosition = FormStartPosition.CenterScreen;
-            //f2.Show();
-            //SetParent((int)f2.Handle, (int)this.Handle);
-            axWindowsMediaPlayer1.URL = @"res\3d.mp4";//连接视频
+           Form_Full f2 = new Form_Full();
+            f2.MdiParent = this;
+            f2.StartPosition = FormStartPosition.CenterScreen;
+            f2.Show();
+            SetParent((int)f2.Handle, (int)this.Handle);
+            //axWindowsMediaPlayer1.URL = @"res\3d.mp4";//连接视频
 
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             //难度展示
-            Form_difficluty f3 = new Form_difficluty();
+            Form_difficulty f3 = new Form_difficulty();
             f3.MdiParent = this;
             f3.StartPosition = FormStartPosition.CenterScreen;
             f3.Show();
