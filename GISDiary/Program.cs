@@ -15,7 +15,7 @@ namespace GISDiary
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormStart());
+            Application.Run(new Form2());
         }
     }
 }

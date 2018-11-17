@@ -11,6 +11,7 @@
     <AssemblyName>GISDiary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>GISDiary.Program</StartupObject>
@@ -112,12 +115,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,43 +127,55 @@
     <Compile Include="Form3.Designer.cs">
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="FormGlobe.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="FormGlobe.Designer.cs">
+      <DependentUpon>FormGlobe.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_showGrave.cs">
+    <Compile Include="FormRoute.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_showGrave.Designer.cs">
-      <DependentUpon>Form_showGrave.cs</DependentUpon>
+    <Compile Include="FormRoute.Designer.cs">
+      <DependentUpon>FormRoute.cs</DependentUpon>
     </Compile>
-    <Compile Include="NetWork.cs" />
+    <Compile Include="Form_difficulty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_difficulty.Designer.cs">
+      <DependentUpon>Form_difficulty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_Full.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Full.Designer.cs">
+      <DependentUpon>Form_Full.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DjRoute.cs" />
     <Compile Include="testform.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="testform.Designer.cs">
       <DependentUpon>testform.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form3.resx">
       <DependentUpon>Form3.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormGlobe.resx">
+      <DependentUpon>FormGlobe.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_showGrave.resx">
-      <DependentUpon>Form_showGrave.cs</DependentUpon>
+    <EmbeddedResource Include="FormRoute.resx">
+      <DependentUpon>FormRoute.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_difficulty.resx">
+      <DependentUpon>Form_difficulty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Full.resx">
+      <DependentUpon>Form_Full.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -181,6 +190,7 @@
     <EmbeddedResource Include="testform.resx">
       <DependentUpon>testform.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -192,6 +202,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="CLMEDIALIBRARYLib">
+      <Guid>{442CFE9F-A878-432F-A36C-29FC40F01199}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="esriAnimation">
       <Guid>{643D491A-D5BD-4788-B610-A0F53CBA0940}</Guid>
       <VersionMajor>10</VersionMajor>
@@ -384,6 +403,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\res\IMG_2257.JPG" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FControlAll\FControlAll.csproj">
+      <Project>{2d830f29-b9d0-4245-87a6-aecb17f655db}</Project>
+      <Name>FControlAll</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FControlEve\FControlEve.csproj">
+      <Project>{543ecc35-3976-48ea-814c-0be243afa41f}</Project>
+      <Name>FControlEve</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
