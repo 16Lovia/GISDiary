@@ -376,7 +376,7 @@ namespace GISDiary
         private void button1_Click(object sender, EventArgs e)
         {
             //子窗体展示
-            Form2 f2 = new Form2();
+            Form_difficluty f2 = new Form_difficluty();
             f2.MdiParent = this;
             f2.StartPosition = FormStartPosition.CenterScreen;
             f2.Show();
