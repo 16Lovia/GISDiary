@@ -16,7 +16,7 @@ namespace GISDiary
         public Form_showGrave()
         {
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
-            ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);
+            //ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);
             InitializeComponent();
             
 
@@ -51,6 +51,9 @@ namespace GISDiary
 
             }
 
+        private void axSceneControl1_OnMouseDown(object sender, ESRI.ArcGIS.Controls.ISceneControlEvents_OnMouseDownEvent e)
+        {
 
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace GISDiary
         public MainForm()
         {
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
-            ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);
+            //ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);
           
             InitializeComponent();
             string filepath = @"res\China.mxd";
@@ -399,7 +399,7 @@ namespace GISDiary
         [DllImport("user32")]
         public static extern int SetParent(int hWndChild, int hWndNewParent);
 
-        private void showGrave()
+/*        private void showGrave()
         {
 
             //十字丝定位放大
@@ -412,11 +412,11 @@ namespace GISDiary
             SetParent((int)fn.Handle, (int)this.Handle);
 
 
-        }
+        }*/
 
         private void btn_show_Click(object sender, EventArgs e)
         {
-            showGrave();
+            //showGrave();
         }
 
         private void btn_Form1_Click(object sender, EventArgs e)
@@ -437,6 +437,15 @@ namespace GISDiary
             SetParent((int)f1.Handle, (int)this.Handle);
 
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //Form3 f1 = new Form3();
+            //f1.MdiParent = this;
+            //f1.StartPosition = FormStartPosition.CenterScreen;
+            //f1.Show();
+            //SetParent((int)f1.Handle, (int)this.Handle);
         }
     }
 }

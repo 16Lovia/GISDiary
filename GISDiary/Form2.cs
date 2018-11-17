@@ -29,9 +29,11 @@ namespace GISDiary
 {
     public partial class Form2 : Form
     {
-        private string tiffPath = "D:\\users\\lenovo\\documents\\visual studio 2015\\Projects\\Teamwork\\Teamwork\\raster\\last.tif";
+        private string tiffPath = @"C:\Users\lenovo\Desktop\4\时间久远程度1.tif";
         public Form2()
         {
+
+            ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
             InitializeComponent();
         }
 
@@ -57,6 +59,7 @@ namespace GISDiary
             IRasterLayer pRasterLayer = new RasterLayerClass();//生成一个矢量图层对象
             pRasterLayer.CreateFromDataset(pRasterDataset);//利用矢量图层对象去创建对应的raster文件
             axMapControl1.Map.AddLayer(pRasterLayer);//添加对应的图层
+            axMapControl1.Update();
             axMapControl1.ActiveView.Refresh();
         }
 
@@ -157,7 +160,6 @@ namespace GISDiary
             {
                 MessageBox.Show("请输入有效图层!", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
 
         private void button_openmxd_Click(object sender, EventArgs e)
@@ -528,6 +530,10 @@ namespace GISDiary
             docPrintExport.Export(docActiveView, docExport, iOutputResolution, true, null);
         }
 
+
+
+        double[,] PixelValue1 = new double[1320, 1118];
+        double[,] PixelValue2 = new double[1320, 1118];
         private void button_kriging_Click(object sender, EventArgs e)
         {
 
@@ -545,7 +551,7 @@ namespace GISDiary
              IGeoDataset geo = featureClass as IGeoDataset;*/
 
             ILayer pLayer = new FeatureLayerClass();
-            IFeatureClass featureClass = GetFeatureClass("D://a_gis工程设计实践课//墓穴地shp//grave.shp");
+            IFeatureClass featureClass = GetFeatureClass(@"D:\a_gis工程设计实践课\china\墓穴地shp\grave.shp");
             IGeoDataset geo = featureClass as IGeoDataset;
 
             object extend = geo.Extent;
@@ -564,7 +570,7 @@ namespace GISDiary
             IRasterLayer pOutRasterlayer = new RasterLayerClass();
             pOutRasterlayer.CreateFromRaster(pOutRsater);
             pOutRasterlayer.Name = "面积大小";
-
+           PixelValue1 = Class_GetPixelValue(pOutRasterlayer);
             IRasterClassifyColorRampRenderer pRClassRend = new RasterClassifyColorRampRendererClass();
             IRasterRenderer pRRend = pRClassRend as IRasterRenderer;
 
@@ -604,6 +610,7 @@ namespace GISDiary
                 pRClassRend.set_Label(i, pRClassRend.get_Break(i).ToString("0.00"));
             }
             pOutRasterlayer.Renderer = pRRend;
+
             this.axMapControl1.AddLayer(pOutRasterlayer);
 
         }
@@ -612,7 +619,7 @@ namespace GISDiary
         {
             object obj = null;
             ILayer pLayer = new FeatureLayerClass();
-            IFeatureClass featureClass = GetFeatureClass("D://a_gis工程设计实践课//墓穴地shp//grave.shp");
+            IFeatureClass featureClass = GetFeatureClass(@"D:\a_gis工程设计实践课\china\墓穴地shp\grave.shp");
             IGeoDataset geo = featureClass as IGeoDataset;
             object extend = geo.Extent;
             object o = null;
@@ -627,10 +634,11 @@ namespace GISDiary
             rasanaenv.SetExtent(esriRasterEnvSettingEnum.esriRasterEnvValue, ref extend, ref o);
             IGeoDataset g_GeoDS_Raster = interpla.IDW((IGeoDataset)feades, 2, rasterrad, ref obj);
             IRaster pOutRsater = (IRaster)g_GeoDS_Raster;
+
             IRasterLayer pOutRasterlayer = new RasterLayerClass();
             pOutRasterlayer.CreateFromRaster(pOutRsater);
-
             pOutRasterlayer.Name = "时间久远程度";
+            PixelValue2 = Class_GetPixelValue(pOutRasterlayer);            
 
             IRasterClassifyColorRampRenderer pRClassRend = new RasterClassifyColorRampRendererClass();
             IRasterRenderer pRRend = pRClassRend as IRasterRenderer;
@@ -673,7 +681,206 @@ namespace GISDiary
             }
             pOutRasterlayer.Renderer = pRRend;
 
+
+
             this.axMapControl1.AddLayer(pOutRasterlayer);
+
+            //两种方法的结合后
+
+        }
+
+        public double[,] Class_GetPixelValue(IRasterLayer pRasterLayer1)
+        {
+            //IRasterLayer pOut;
+
+            IRaster pRaster = pRasterLayer1.Raster;
+            IRaster2 pRaster2 = pRaster as IRaster2;
+            IRasterProps pRasterProps = pRaster as IRasterProps;
+
+            //获取图层的行列值   
+            int Height = pRasterProps.Height;
+            int Width = pRasterProps.Width;
+
+            //定义并初始化数组，用于存储栅格内所有像员像素值
+            double[,] PixelValue = new double[Height, Width];
+            //thisRasterLayer = pRasterLayer1;
+
+            System.Array pixels;
+
+            //定义RasterCursor初始化，参数设为null，内部自动设置PixelBlock大小
+            IRasterCursor pRasterCursor = pRaster2.CreateCursorEx(null);
+
+            //用于存储PixelBlock的长宽
+            long blockwidth = 0;
+            long blockheight = 0;
+
+            IPixelBlock3 pPixelBlock3;
+
+            try
+            {
+                do
+                {
+                    //获取Cursor的左上角坐标
+                    int left = (int)pRasterCursor.TopLeft.X;
+                    int top = (int)pRasterCursor.TopLeft.Y;
+
+                    pPixelBlock3 = pRasterCursor.PixelBlock as IPixelBlock3;
+
+                    blockheight = pPixelBlock3.Height;
+                    blockwidth = pPixelBlock3.Width;
+                    //pPixelBlock3.Mask(255);
+
+                    pixels = (System.Array)pPixelBlock3.get_PixelData(0);
+
+                    //指定平面的像素的数组
+                    //获取该Cursor的PixelBlock中像素的值
+                    for (int i = 0; i < blockheight; i++)
+                    {
+                        for (int j = 0; j < blockwidth; j++)
+                        {
+                            //一定要注意，pixels中的数组排序为[Width,Height]
+
+                            PixelValue[top + i, left + j] = Convert.ToDouble(pixels.GetValue(j, i));
+
+                        }
+                    }
+                }
+                while (pRasterCursor.Next() == true);
+                //MessageBox.Show("完成遍历！");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return PixelValue;
+        }
+
+        private void btn_2e_Click(object sender, EventArgs e)
+        {
+            ILayer pLayer = new FeatureLayerClass();
+            IFeatureClass featureClass = GetFeatureClass(@"D:\a_gis工程设计实践课\china\墓穴地shp\grave.shp");
+            IGeoDataset geo = featureClass as IGeoDataset;
+
+            object extend = geo.Extent;
+            object o = null;
+            IFeatureClassDescriptor feades = new FeatureClassDescriptorClass();
+            feades.Create(featureClass, null, "area");
+            IRasterRadius rasterrad = new RasterRadiusClass();
+            rasterrad.SetVariable(12, ref o);
+            object dCell = 0.014800000;//可以根据不同的点图层进行设置
+            IInterpolationOp interpla = new RasterInterpolationOpClass();
+            IRasterAnalysisEnvironment rasanaenv = interpla as IRasterAnalysisEnvironment;
+            rasanaenv.SetCellSize(esriRasterEnvSettingEnum.esriRasterEnvValue, ref dCell);
+            rasanaenv.SetExtent(esriRasterEnvSettingEnum.esriRasterEnvValue, ref extend, ref o);
+            IGeoDataset g_GeoDS_Raster = interpla.IDW((IGeoDataset)feades, 2, rasterrad, ref o);
+            IRaster pOutRsater = (IRaster)g_GeoDS_Raster;
+            IRasterLayer pOutRasterlayer = new RasterLayerClass();
+            pOutRasterlayer.CreateFromRaster(pOutRsater);
+            pOutRasterlayer.Name = "两个因素都考虑";
+
+            //IRaster raster = pOutRasterlayer.Raster;
+            IRaster2 raster2 = (IRaster2)pOutRsater;
+            // 指定像素块大小
+            IPnt pntBlock = new PntClass();
+            pntBlock.X = 1280;
+            pntBlock.Y = 1280;
+            //创建一个光标以给定像素块大小
+            //定义RasterCursor初始化，参数设为null，内部自动设置PixelBlock大小
+            //IRasterCursor pRasterCursor = pRaster2.CreateCursorEx(null);
+            IRasterCursor rasterCursor = raster2.CreateCursorEx(null);
+            //控制像素块级别的编辑操作
+            IRasterEdit rasterEdit = raster2 as IRasterEdit;
+             if (rasterEdit.CanEdit())
+             {
+              //得到一段光栅带
+               IRasterBandCollection bandCollection = (IRasterBandCollection)pOutRsater;
+                System.Array pixels;
+                IPnt pnt = null;
+                            object value;
+                            int bandCount = bandCollection.Count;
+                            //创建像素块
+                            IPixelBlock3 pixelBlock3 = null;
+                            int blockWidth = 0;
+                            int blockHeight = 0;
+                double temp = 0;
+                            do
+                            {
+                                pixelBlock3 = rasterCursor.PixelBlock as IPixelBlock3;
+                                blockWidth = pixelBlock3.Width;
+                                blockHeight = pixelBlock3.Height;
+                                for (int k = 0; k < bandCount; k++)
+                                {
+                                    //指定平面的像素的数组
+                                    pixels = (System.Array)pixelBlock3.get_PixelData(k);
+
+                                    for (int i = 0; i < blockWidth; i++)
+                                    {
+                                        for (int j = 0; j < blockHeight; j++)
+                                        {
+                                //value = pixels.GetValue(i, j);
+
+                                //if (Convert.ToInt32(value) == 0)
+                                //{
+                                //设置像素的颜色值
+                                temp = PixelValue1[i, j] + PixelValue2[i, j];
+                                pixels.SetValue((int)temp, i, j);
+                                            //}
+                                        }
+                                    }
+                                    pixelBlock3.set_PixelData(k, pixels);
+                                }
+                                pnt = rasterCursor.TopLeft;
+                                rasterEdit.Write(pnt, (IPixelBlock)pixelBlock3);
+                            }
+                            while (rasterCursor.Next());
+                            System.Runtime.InteropServices.Marshal.ReleaseComObject(rasterEdit);
+
+                
+                
+                
+                //渲染
+                IRasterClassifyColorRampRenderer pRClassRend = new RasterClassifyColorRampRendererClass();
+                IRasterRenderer pRRend = pRClassRend as IRasterRenderer;
+
+                IRaster pRaster = pOutRasterlayer.Raster;
+                IRasterBandCollection pRBandCol = pRaster as IRasterBandCollection;
+                IRasterBand pRBand = pRBandCol.Item(0);
+                if (pRBand.Histogram == null)
+                {
+                    pRBand.ComputeStatsAndHist();
+                }
+                pRRend.Raster = pRaster;
+                pRClassRend.ClassCount = 10;
+                pRRend.Update();
+
+                IRgbColor pFromColor = new RgbColorClass();
+                pFromColor.Red = 135;//天蓝色
+                pFromColor.Green = 206;
+                pFromColor.Blue = 235;
+                IRgbColor pToColor = new RgbColorClass();
+                pToColor.Red = 124;//草坪绿
+                pToColor.Green = 252;
+                pToColor.Blue = 0;
+
+                IAlgorithmicColorRamp colorRamp = new AlgorithmicColorRampClass();
+                colorRamp.Size = 10;
+                colorRamp.FromColor = pFromColor;
+                colorRamp.ToColor = pToColor;
+                bool createColorRamp;
+                colorRamp.CreateRamp(out createColorRamp);
+
+                IFillSymbol fillSymbol = new SimpleFillSymbolClass();
+
+                for (int i = 0; i < pRClassRend.ClassCount; i++)
+                {
+
+                    fillSymbol.Color = colorRamp.get_Color(i);
+                    pRClassRend.set_Symbol(i, fillSymbol as ISymbol);
+                    pRClassRend.set_Label(i, pRClassRend.get_Break(i).ToString("0.00"));
+                }
+                pOutRasterlayer.Renderer = pRRend;
+                this.axMapControl1.AddLayer(pOutRasterlayer);
+               }
         }
     }
 }
