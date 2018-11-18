@@ -1,4 +1,5 @@
-﻿using ESRI.ArcGIS.Analyst3D;
+﻿using CCWin;
+using ESRI.ArcGIS.Analyst3D;
 using ESRI.ArcGIS.esriSystem;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Windows.Forms;
 
 namespace GISDiary
 {
-    public partial class Form_showGrave : Form
+    public partial class Form_showGrave : Skin_DevExpress
     {
         public Form_showGrave()
         {

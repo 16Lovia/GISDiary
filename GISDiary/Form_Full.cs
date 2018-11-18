@@ -1,6 +1,8 @@
-﻿using ESRI.ArcGIS.Analyst3D;
+﻿using CCWin;
+using ESRI.ArcGIS.Analyst3D;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Display;
+using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geometry;
 using System;
 using System.Collections.Generic;
@@ -15,7 +17,7 @@ using System.Windows.Forms;
 
 namespace GISDiary
 {
-    public partial class Form_Full : Form
+    public partial class Form_Full : Skin_DevExpress
     {
         public Form_Full()
         {
@@ -56,13 +58,6 @@ namespace GISDiary
                 pPtObs.Z += (pPtObs.Z - pPtTar.Z) * scale;
                 pCamera.Observer = pPtObs;
                 axSceneControl1.SceneGraph.RefreshViewers();
-
-
-
-                //pEnv.XMax = e.X + 5;
-                //pEnv.XMin = e.X - 5;
-                //pEnv.YMax = e.Y + 5;
-                //pEnv.YMin = e.Y - 5;
 
                 IRectangleElement pRectangleEle = new RectangleElementClass();
                 IElement pEle = pRectangleEle as IElement;
@@ -111,12 +106,13 @@ namespace GISDiary
       
         private void Form_Full_Load(object sender, EventArgs e)
         {
-           // string file2d = @"res\china\china_1.mxd";
-            string file2d = @"res\usa.mxd";
+           string file2d = @"res\china\china_1.mxd";
+            //string file2d = @"res\usa.mxd";
             axMapControl1.LoadMxFile(file2d);
             axMapControl1.Extent = axMapControl1.FullExtent;
-            //string file3d = @"res\china3d\china3d.sxd";
-            //axSceneControl1.LoadSxFile(file3d);
+            string file3d = @"res\china3d\china3d.sxd";            
+             axSceneControl1.LoadSxFile(file3d);
+
             //string file2d_1 = @"res\china\china_1.mxd";
             //axMapControl2.LoadMxFile(file2d_1);
             ////axMapControl2.Extent = axMapControl1.FullExtent;
@@ -137,8 +133,8 @@ namespace GISDiary
         }
 
         private void axMapControl1_OnExtentUpdated(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnExtentUpdatedEvent e)
-        {         
-            //创建鹰眼中线框
+        {
+            //创建鹰眼中线框       
             IEnvelope pEnv = (IEnvelope)e.newEnvelope;
             IRectangleElement pRectangleEle = new RectangleElementClass();
             IElement pEle = pRectangleEle as IElement;
@@ -233,8 +229,7 @@ namespace GISDiary
             //设置 MapControl 显示范围至数据的全局范围
             this.axMapControl2.Extent = this.axMapControl1.FullExtent;
             // 刷新鹰眼控件地图
-             this.axMapControl2.Refresh();
-
+            this.axMapControl2.Refresh();
         }
 
         private void axMapControl1_OnFullExtentUpdated(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnFullExtentUpdatedEvent e)
@@ -245,6 +240,115 @@ namespace GISDiary
             this.axMapControl2.Extent = this.axMapControl1.FullExtent;
             // 刷新鹰眼控件地图
             this.axMapControl2.Refresh();
+        }
+
+        private void axMapControl1_OnMouseMove(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseMoveEvent e)
+        {
+
+
+        }
+
+        // 将平面坐标转换为经纬度。
+        private IPoint GetGeo(IActiveView pActiveView, double x, double y)
+        {
+            try
+            {
+                IMap pMap = pActiveView.FocusMap;
+                IPoint pt = new PointClass();
+                ISpatialReferenceFactory pfactory = new SpatialReferenceEnvironmentClass();
+                ISpatialReference flatref = pMap.SpatialReference;
+                ISpatialReference earthref = pfactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_Beijing1954);
+                pt.PutCoords(x, y);
+
+                IGeometry geo = (IGeometry)pt;
+                geo.SpatialReference = flatref;
+                geo.Project(earthref);
+                double xx = pt.X;
+                return pt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+
+        // 将经纬度点转换为平面坐标。
+        private IPoint GetProject(IActiveView pActiveView, double x, double y)
+        {
+            try
+            {
+                IMap pMap = pActiveView.FocusMap;
+                IPoint pt = new PointClass();
+                ISpatialReferenceFactory pfactory = new SpatialReferenceEnvironmentClass();
+                ISpatialReference flatref = pMap.SpatialReference;
+                ISpatialReference earthref = pfactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_Beijing1954);
+                pt.PutCoords(x, y);
+                IGeometry geo = (IGeometry)pt;
+                geo.SpatialReference = earthref;
+                geo.Project(flatref);
+                return pt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+
+            }
+        }
+
+        private void axMapControl1_OnDoubleClick(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnDoubleClickEvent e)
+        {
+
+            //设置三维视角
+            IActiveView pActiveView = axMapControl1.ActiveView;
+            //IActiveView pActiveView1 = this.axMapControl1 as IActiveView;   //获取当前二维活动区域               
+            //IEnvelope pEnv = pActiveView1 as IEnvelope;      //将此二位区域的Extent 保存在Envelope中
+            IActiveView pActiveView1 = this.axMapControl1.Map as IActiveView;   //获取当前二维活动区域               
+            IEnvelope pEnv = pActiveView1.Extent as IEnvelope;      //将此二位区域的Extent 保存在Envelope中
+            IPoint point = new PointClass();        //将此区域的中心点保存起来
+            point= GetGeo(pActiveView,(pEnv.XMax + pEnv.XMin) / 2, (pEnv.YMax + pEnv.YMin) / 2);  //取得视角中心点X坐标
+
+            ICamera pCamera = this.axSceneControl1.Camera;      //取得三维活动区域的Camara      ，就像你照相一样的视角，它有Taget（目标点）和Observer（观察点）两个属性需要设置    
+            IPoint ptTaget = new PointClass();      //创建一个目标点
+            ptTaget = point;        //视觉区域中心点作为目标点
+            ptTaget.Z = 0;         //设置目标点高度，这里设为 0米
+
+            IPoint ptObserver = new PointClass();   //创建观察点 的X，Y，Z
+            ptObserver.X = point.X;     //设置观察点坐标的X坐标
+            ptObserver.Y = point.Y + 2;     //设置观察点坐标的Y坐标（这里加90米，是在南北方向上加了90米，当然这个数字可以自己定，意思就是将观察点和目标点有一定的偏差，从南向北观察
+            double height = 10;     //计算观察点合适的高度，这里用三目运算符实现的，效果稍微好一些，当然可以自己拟定
+            ptObserver.Z = height;              //设置观察点坐标的Y坐标
+
+            // ptObserver = GetProject(pActiveView1, pCamera.Observer.X, pCamera.Observer.Y);
+            pCamera.Target = ptTaget;       //赋予目标点
+            pCamera.Observer = ptObserver;      //将上面设置的观察点赋予camera的观察点
+            pCamera.Inclination = 15;       //设置三维场景视角，也就是高度角，视线与地面所成的角度
+            pCamera.Azimuth = 180;          //设置三维场景方位角，视线与向北的方向所成的角度
+            axSceneControl1.SceneGraph.RefreshViewers();        //刷新地图，（很多时候，看不到效果，都是你没有刷新）
+
+            System.Timers.Timer t = new System.Timers.Timer();//500ms空隙
+            t.Elapsed += new System.Timers.ElapsedEventHandler(sceneRotate);//调用函数
+            t.AutoReset = false;//是否循环调用
+            t.Enabled = true;//是否调用
+            t.Start();
+        }
+
+        private void sceneRotate(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            ICamera pCamera = this.axSceneControl1.Camera;      //取得三维活动区域的Camara      ，就像你照相一样的视角，它有Taget（目标点）和Observer（观察点）两个属性需要设置    
+            IPoint ptObserver = new PointClass();
+            ptObserver = pCamera.Observer;
+            for (double i = 0; i < 0.1;)
+            {
+                 i += 0.001;
+                ptObserver.X += i;
+                //ptObserver.Y += i;
+
+                pCamera.Observer = ptObserver;
+                axSceneControl1.SceneGraph.RefreshViewers();        //刷新地图，（很多时候，看不到效果，都是你没有刷新）
+                System.Threading.Thread.Sleep(30);//停顿2秒钟  
+            }
         }
     }
 }

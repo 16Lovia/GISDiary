@@ -16,10 +16,11 @@ using System.Runtime.InteropServices;
 using ESRI.ArcGIS.NetworkAnalyst;
 using System.Collections;
 using System.Threading;
+using CCWin;
 
 namespace GISDiary
 {
-    public partial class FormStart : Form
+    public partial class FormStart : Skin_DevExpress
     {
         public FormStart()
         {
@@ -143,6 +144,67 @@ namespace GISDiary
             {
                 axWindowsMediaPlayer1.fullScreen = true;
             }
+        }
+
+        private void button_test_Click(object sender, EventArgs e)
+        {
+            //test
+            test f5 = new test();
+            f5.MdiParent = this;
+            f5.StartPosition = FormStartPosition.CenterScreen;
+            f5.Show();
+            SetParent((int)f5.Handle, (int)this.Handle);
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            //Globe动画
+            FormGlobe f1 = new FormGlobe();
+            f1.MdiParent = this;
+            f1.StartPosition = FormStartPosition.CenterScreen;
+            f1.Show();
+            SetParent((int)f1.Handle, (int)this.Handle);
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            //总体展示
+            Form_Full f2 = new Form_Full();
+            f2.MdiParent = this;
+            f2.StartPosition = FormStartPosition.CenterScreen;
+            f2.Show();
+            SetParent((int)f2.Handle, (int)this.Handle);
+            //axWindowsMediaPlayer1.URL = @"res\3d.mp4";//连接视频
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            //难度展示
+            Form_difficulty f3 = new Form_difficulty();
+            f3.MdiParent = this;
+            f3.StartPosition = FormStartPosition.CenterScreen;
+            f3.Show();
+            SetParent((int)f3.Handle, (int)this.Handle);
+        }
+
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+            //墓穴展示
+            Form_showGrave f4 = new Form_showGrave();
+            f4.MdiParent = this;
+            f4.StartPosition = FormStartPosition.CenterScreen;
+            f4.Show();
+            SetParent((int)f4.Handle, (int)this.Handle);
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+            //路径分析
+            FormRoute f5 = new FormRoute();
+            f5.MdiParent = this;
+            f5.StartPosition = FormStartPosition.CenterScreen;
+            f5.Show();
+            SetParent((int)f5.Handle, (int)this.Handle);
         }
     }
 }

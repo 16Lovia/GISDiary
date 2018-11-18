@@ -24,10 +24,12 @@ using ESRI.ArcGIS.Geoprocessing;
 using ESRI.ArcGIS.SpatialAnalystTools;
 using ESRI.ArcGIS.SpatialAnalyst;
 using ESRI.ArcGIS.GeoAnalyst;
+using CCWin;
+using ESRI.ArcGIS.Analyst3D;
 
 namespace GISDiary
 {
-    public partial class Form_difficulty : Form
+    public partial class Form_difficulty : Skin_DevExpress
     {
         //  private string tiffPath = "D:\\users\\lenovo\\documents\\visual studio 2015\\Projects\\Teamwork\\Teamwork\\raster\\last.tif";
         public Form_difficulty()
@@ -35,11 +37,22 @@ namespace GISDiary
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
             ESRI.ArcGIS.RuntimeManager.BindLicense(ESRI.ArcGIS.ProductCode.Engine);
             InitializeComponent();
+            this.MouseWheel += new MouseEventHandler(this.axSceneControl_OnMouseWheel);
+
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
             ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
+            string file2d = @"res\china\china_1.mxd";
+            //string file2d = @"res\usa.mxd";
+            axMapControl1.LoadMxFile(file2d);
+            string file2d_2 = @"res\china\china_1.mxd";
+            //string file2d = @"res\usa.mxd";
+            axMapControl2.LoadMxFile(file2d_2);
+            //axMapControl1.Extent = axMapControl1.FullExtent;
+             string file3d = @"res\china3d\china3d.sxd";
+             axSceneControl1.LoadSxFile(file3d);
         }
         private void buttton_tiff_Click(object sender, EventArgs e)
         {
@@ -64,6 +77,50 @@ namespace GISDiary
 
         private void axMapControl1_OnMouseDown(object sender, IMapControlEvents2_OnMouseDownEvent e)
         {
+            if (e.button == 1)
+            {
+                //记录鼠标点击的点
+                IPoint pNewPoint = new PointClass();
+                pNewPoint.PutCoords(e.mapX, e.mapY);
+
+                //设置三维视角
+                IActiveView pActiveView = axMapControl1.ActiveView;
+                //IActiveView pActiveView1 = this.axMapControl1 as IActiveView;   //获取当前二维活动区域               
+                //IEnvelope pEnv = pActiveView1 as IEnvelope;      //将此二位区域的Extent 保存在Envelope中
+                IActiveView pActiveView1 = this.axMapControl1.Map as IActiveView;   //获取当前二维活动区域               
+                IEnvelope pEnv = pActiveView1.Extent as IEnvelope;      //将此二位区域的Extent 保存在Envelope中
+                IPoint point = new PointClass();        //将此区域的中心点保存起来
+                point = GetGeo(pActiveView, (pEnv.XMax + pEnv.XMin) / 2, (pEnv.YMax + pEnv.YMin) / 2);  //取得视角中心点X坐标
+
+                ICamera pCamera = this.axSceneControl1.Camera;      //取得三维活动区域的Camara      ，就像你照相一样的视角，它有Taget（目标点）和Observer（观察点）两个属性需要设置    
+                IPoint ptTaget = new PointClass();      //创建一个目标点
+                ptTaget = point;        //视觉区域中心点作为目标点
+                ptTaget.Z = 0;         //设置目标点高度，这里设为 0米
+
+                IPoint ptObserver = new PointClass();   //创建观察点 的X，Y，Z
+                ptObserver.X = point.X;     //设置观察点坐标的X坐标
+                ptObserver.Y = point.Y + 2;     //设置观察点坐标的Y坐标（这里加90米，是在南北方向上加了90米，当然这个数字可以自己定，意思就是将观察点和目标点有一定的偏差，从南向北观察
+                double height = 10;     //计算观察点合适的高度，这里用三目运算符实现的，效果稍微好一些，当然可以自己拟定
+                ptObserver.Z = height;              //设置观察点坐标的Y坐标
+
+                // ptObserver = GetProject(pActiveView1, pCamera.Observer.X, pCamera.Observer.Y);
+                pCamera.Target = ptTaget;       //赋予目标点
+                pCamera.Observer = ptObserver;      //将上面设置的观察点赋予camera的观察点
+                pCamera.Inclination = 20;       //设置三维场景视角，也就是高度角，视线与地面所成的角度
+                pCamera.Azimuth = 180;          //设置三维场景方位角，视线与向北的方向所成的角度
+                axSceneControl1.SceneGraph.RefreshViewers();        //刷新地图，（很多时候，看不到效果，都是你没有刷新）
+
+                System.Timers.Timer t = new System.Timers.Timer();//500ms空隙
+                t.Elapsed += new System.Timers.ElapsedEventHandler(sceneRotate);//调用函数
+                t.AutoReset = false;//是否循环调用
+                t.Enabled = true;//是否调用
+                t.Start();
+            }
+            //this.axMapControl1.Extent = this.axMapControl1.TrackRectangle();
+            else if (e.button == 2)//右键
+            { this.axMapControl1.Pan();
+
+            }
             // label1.Text = " 当前坐标 X = " + e.mapX.ToString() + " Y = " + e.mapY.ToString() + " " + this.axMapControl1.MapUnits.ToString().Substring(4);
         }
 
@@ -126,7 +183,7 @@ namespace GISDiary
 
                     //axMapControl1.Update();
                     //axMapControl1.Refresh();
-                    axTOCControl1.Update();
+                    //axTOCControl1.Update();
                     //Thread.Sleep(2000); //停一秒
 
                     for (int i = 0; i < 4; i++)
@@ -199,9 +256,6 @@ namespace GISDiary
 
         }
 
-        private void axTOCControl1_OnMouseDown(object sender, ITOCControlEvents_OnMouseDownEvent e)
-        {
-        }
         /// <summary>
         /// 获取要素类
         /// </summary>
@@ -467,10 +521,7 @@ namespace GISDiary
 
         }
 
-        private void axPageLayoutControl1_OnPageLayoutReplaced(object sender, IPageLayoutControlEvents_OnPageLayoutReplacedEvent e)
-        {
 
-        }
         public void CopyAndWriteMap()
         {
             IObjectCopy objectCopy = new ObjectCopyClass();
@@ -496,27 +547,27 @@ namespace GISDiary
             CopyAndWriteMap();
         }
 
-        private void axMapControl1_OnAfterScreenDraw(object sender, IMapControlEvents2_OnAfterScreenDrawEvent e)
-        {
-            if (strUnion == false)
-                return;
-            repGeoMap();
-        }
+        //private void axMapControl1_OnAfterScreenDraw(object sender, IMapControlEvents2_OnAfterScreenDrawEvent e)
+        //{
+        //    if (strUnion == false)
+        //        return;
+        //    repGeoMap();
+        //}
 
-        private void axMapControl1_OnViewRefreshed(object sender, IMapControlEvents2_OnViewRefreshedEvent e)
-        {
-            if (strUnion == false)
-                return;
-            CopyAndWriteMap();
-        }
+        //private void axMapControl1_OnViewRefreshed(object sender, IMapControlEvents2_OnViewRefreshedEvent e)
+        //{
+        //    if (strUnion == false)
+        //        return;
+        //    CopyAndWriteMap();
+        //}
 
-        private void axMapControl1_OnMapReplaced(object sender, IMapControlEvents2_OnMapReplacedEvent e)
-        {
-            //TbGeoMap();
-            if (strUnion == false)
-                return;
-            CopyAndWriteMap();
-        }
+        //private void axMapControl1_OnMapReplaced(object sender, IMapControlEvents2_OnMapReplacedEvent e)
+        //{
+        //    //TbGeoMap();
+        //    if (strUnion == false)
+        //        return;
+        //    CopyAndWriteMap();
+        //}
 
         private void button_save_Click(object sender, EventArgs e)
         {
@@ -582,13 +633,13 @@ namespace GISDiary
             pRRend.Update();
 
             IRgbColor pFromColor = new RgbColorClass();
-            pFromColor.Red = 124;//天蓝色 124 252 0
-            pFromColor.Green = 252;
-            pFromColor.Blue = 0;
+            pFromColor.Red =255;//天蓝色 124 252 0255 246 143 139 134 78
+            pFromColor.Green = 246;
+            pFromColor.Blue = 143;
             IRgbColor pToColor = new RgbColorClass();
-            pToColor.Red = 135;//草坪绿
-            pToColor.Green = 206;
-            pToColor.Blue = 235;
+            pToColor.Red = 139;//草坪绿
+            pToColor.Green = 134;
+            pToColor.Blue = 78;
 
             IAlgorithmicColorRamp colorRamp = new AlgorithmicColorRampClass();
             colorRamp.Size = 10;
@@ -752,7 +803,7 @@ namespace GISDiary
 
                     //axMapControl1.Update();
                     //axMapControl1.Refresh();
-                    axTOCControl1.Update();
+                    //axTOCControl1.Update();
                     //Thread.Sleep(2000); //停一秒
 
                     for (int i = 0; i < 4; i++)
@@ -951,7 +1002,9 @@ namespace GISDiary
 
         private void 趟山海ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            axMapControl1.Map.ClearLayers();
+            string file2d = @"res\china\last_mxd\last.mxd";
+            axMapControl1.LoadMxFile(file2d);
             //  IFeatureLayer pfeaturelayer = (IFeatureLayer)this.axMapControl1.get_Layer(0);
             //IFeatureClass pfeatureclass = pfeaturelayer.FeatureClass;
 
@@ -1001,13 +1054,13 @@ namespace GISDiary
             pRRend.Update();
 
             IRgbColor pFromColor = new RgbColorClass();
-            pFromColor.Red = 124;//天蓝色 124 252 0
-            pFromColor.Green = 252;
-            pFromColor.Blue = 0;
+            pFromColor.Red = 0;//天蓝色 124 252 0     0 92 230         190 232 255
+            pFromColor.Green = 92;
+            pFromColor.Blue = 230;
             IRgbColor pToColor = new RgbColorClass();
-            pToColor.Red = 135;//草坪绿
-            pToColor.Green = 206;
-            pToColor.Blue = 235;
+            pToColor.Red = 190;//草坪绿
+            pToColor.Green = 232;
+            pToColor.Blue = 255;
 
             IAlgorithmicColorRamp colorRamp = new AlgorithmicColorRampClass();
             colorRamp.Size = 10;
@@ -1030,6 +1083,9 @@ namespace GISDiary
 
         private void 遍古今ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //axMapControl1.Map.ClearLayers();
+            //string file2d = @"res\china\last_mxd\last.mxd";
+           // axMapControl1.LoadMxFile(file2d);
             object obj = null;
             ILayer pLayer = new FeatureLayerClass();
             IFeatureClass featureClass = GetFeatureClass("E://lcy//GISDiary//GISDiary//bin//Debug//res//china//墓穴地shp//grave.shp");
@@ -1067,13 +1123,14 @@ namespace GISDiary
             pRRend.Update();
 
             IRgbColor pFromColor = new RgbColorClass();
-            pFromColor.Red = 135;//天蓝色
-            pFromColor.Green = 206;
-            pFromColor.Blue = 235;
+            pFromColor.Red = 190;//天蓝色 124 252 0     0 92 230         190 232 255
+            pFromColor.Green = 232;
+            pFromColor.Blue = 255;
             IRgbColor pToColor = new RgbColorClass();
-            pToColor.Red = 124;//草坪绿
-            pToColor.Green = 252;
-            pToColor.Blue = 0;
+            pToColor.Red = 0;//草坪绿
+            pToColor.Green = 92;
+            pToColor.Blue = 230;
+
 
             IAlgorithmicColorRamp colorRamp = new AlgorithmicColorRampClass();
             colorRamp.Size = 10;
@@ -1098,21 +1155,23 @@ namespace GISDiary
 
         private void 盗墓笔记ToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
+            //axMapControl1.Map.ClearLayers();
+            string file2d = @"res\china\china.mxd";
+            axMapControl1.LoadMxFile(file2d);
+            //IMapDocument xjMxdMapDocument = new MapDocumentClass();
+            //OpenFileDialog xjMxdOpenFileDialog = new OpenFileDialog();
+            //xjMxdOpenFileDialog.Filter = "地图文档(*.mxd)|*.mxd";
 
-            IMapDocument xjMxdMapDocument = new MapDocumentClass();
-            OpenFileDialog xjMxdOpenFileDialog = new OpenFileDialog();
-            xjMxdOpenFileDialog.Filter = "地图文档(*.mxd)|*.mxd";
 
-
-            if (xjMxdOpenFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string xjmxdFilePath = xjMxdOpenFileDialog.FileName;
-                if (axMapControl1.CheckMxFile(xjmxdFilePath))
-                {
-                    axMapControl1.Map.ClearLayers();
-                    axMapControl1.LoadMxFile(xjmxdFilePath);
-                }
-            }
+            //if (xjMxdOpenFileDialog.ShowDialog() == DialogResult.OK)
+            //{
+            //    string xjmxdFilePath = xjMxdOpenFileDialog.FileName;
+            //    if (axMapControl1.CheckMxFile(xjmxdFilePath))
+            //    {
+            //        axMapControl1.Map.ClearLayers();
+            //        axMapControl1.LoadMxFile(xjmxdFilePath);
+            //    }
+            //}
             axMapControl1.ActiveView.Refresh();
         }
 
@@ -1141,9 +1200,9 @@ namespace GISDiary
                 ISimpleMarkerSymbol pMarkerSymbol = new SimpleMarkerSymbol();
                 pMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSCircle;//设置点符号样式为方形
                 IRgbColor pRgbColor1 = new RgbColor();
-                pRgbColor1.Red = 127;
-                pRgbColor1.Blue = 255;
-                pRgbColor1.Green = 212;
+                pRgbColor1.Red = 144;
+                pRgbColor1.Blue = 238;
+                pRgbColor1.Green = 144; 
                 pMarkerSymbol.Color = pRgbColor1;
                 table = pLayer as ITable;
                 cursor = table.Search(null, true);
@@ -1171,7 +1230,7 @@ namespace GISDiary
 
                     //axMapControl1.Update();
                     //axMapControl1.Refresh();
-                    axTOCControl1.Update();
+                    //axTOCControl1.Update();
                     //Thread.Sleep(2000); //停一秒
 
                     for (int i = 0; i < 4; i++)
@@ -1312,9 +1371,7 @@ namespace GISDiary
                 pGraphicsContainer.DeleteElement(pDeletElement);  //如果已经存在比例尺，删除已经存在的比例尺
             }
             pGraphicsContainer.AddElement(pElement, 0);
-            //刷新axPageLayoutControl1的内容
-
-            axPageLayoutControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        
 
             //---------------添加标题-------------
             //IGraphicsContainer graphicsContainer = axPageStation.PageLayout as IGraphicsContainer;
@@ -1345,14 +1402,280 @@ namespace GISDiary
             graphicsContainer.AddElement(element, 0);
             axPageLayoutControl1.Refresh();
 
-            IActiveView docActiveView = axPageLayoutControl1.ActiveView;
-            IExport docExport = new ExportJPEGClass();
-            IPrintAndExport docPrintExport = new PrintAndExportClass();
-            int iOutputResolution = 300;
-            //设置输出文件名
-            docExport.ExportFileName = @"res\盗墓难度专题图.JPG";
-            //输出当前视图到输出文件
-            docPrintExport.Export(docActiveView, docExport, iOutputResolution, true, null);
+            //IActiveView docActiveView = axPageLayoutControl1.ActiveView;
+            //IExport docExport = new ExportJPEGClass();
+            //IPrintAndExport docPrintExport = new PrintAndExportClass();
+            //int iOutputResolution = 300;
+            ////设置输出文件名
+            //docExport.ExportFileName = @"res\盗墓难度专题图.JPG";
+            ////输出当前视图到输出文件
+            //docPrintExport.Export(docActiveView, docExport, iOutputResolution, true, null);
+            //刷新axPageLayoutControl1的内容
+
+            axPageLayoutControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        }
+
+        private void axMapControl1_OnExtentUpdated(object sender, IMapControlEvents2_OnExtentUpdatedEvent e)
+        {
+            //创建鹰眼中线框       
+            IEnvelope pEnv = (IEnvelope)e.newEnvelope;
+            IRectangleElement pRectangleEle = new RectangleElementClass();
+            IElement pEle = pRectangleEle as IElement;
+            pEle.Geometry = pEnv;
+
+            //设置线框的边线对象，包括颜色和线宽
+            IRgbColor pColor = new RgbColorClass();
+            pColor.Red = 255;
+            pColor.Green = 0;
+            pColor.Blue = 0;
+            pColor.Transparency = 255;
+            // 产生一个线符号对象 
+            ILineSymbol pOutline = new SimpleLineSymbolClass();
+            pOutline.Width = 2;
+            pOutline.Color = pColor;
+
+            // 设置颜色属性 
+            pColor.Red = 255;
+            pColor.Green = 0;
+            pColor.Blue = 0;
+            pColor.Transparency = 0;
+
+            // 设置线框填充符号的属性 
+            IFillSymbol pFillSymbol = new SimpleFillSymbolClass();
+            pFillSymbol.Color = pColor;
+            pFillSymbol.Outline = pOutline;
+            IFillShapeElement pFillShapeEle = pEle as IFillShapeElement;
+            pFillShapeEle.Symbol = pFillSymbol;
+
+            // 得到鹰眼视图中的图形元素容器
+            IGraphicsContainer pGra = axMapControl2.Map as IGraphicsContainer;
+            IActiveView pAv = pGra as IActiveView;
+            // 在绘制前，清除 axMapControl2 中的任何图形元素 
+            pGra.DeleteAllElements();
+            // 鹰眼视图中添加线框
+            pGra.AddElement((IElement)pFillShapeEle, 0);
+            // 刷新鹰眼
+            pAv.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        }
+
+        private void axMapControl2_OnMouseDown(object sender, IMapControlEvents2_OnMouseDownEvent e)
+        {
+            // 按下鼠标左键移动矩形框 
+            if (e.button == 1)
+            {
+                IPoint pPoint = new PointClass();
+                pPoint.PutCoords(e.mapX, e.mapY);
+                IEnvelope pEnvelope = this.axMapControl1.Extent;
+                pEnvelope.CenterAt(pPoint);
+                this.axMapControl1.Extent = pEnvelope;
+                this.axMapControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
+            }
+            // 按下鼠标右键绘制矩形框 
+            else if (e.button == 2)
+            {
+                IEnvelope pEnvelop = this.axMapControl2.TrackRectangle();
+                this.axMapControl1.Extent = pEnvelop;
+                this.axMapControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
+            }
+            else if (e.button == 4)
+            {
+                this.axMapControl2.Pan();
+            }
+        }
+
+        private void axMapControl2_OnMouseMove(object sender, IMapControlEvents2_OnMouseMoveEvent e)
+        {
+            // 如果不是左键按下就直接返回 
+            if (e.button != 1) return;
+            IPoint pPoint = new PointClass();
+            pPoint.PutCoords(e.mapX, e.mapY);
+            this.axMapControl1.CenterAt(pPoint);
+            this.axMapControl1.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeography, null, null);
+        }
+
+        private ILayer GetOverviewLayer(IMap map)
+        {
+            //获取主视图的第一个图层
+            ILayer pLayer = map.get_Layer(0);
+            //遍历其他图层，并比较视图范围的宽度，返回宽度最大的图层
+            ILayer pTempLayer = null;
+            for (int i = 1; i < map.LayerCount; i++)
+            {
+                pTempLayer = map.get_Layer(i);
+                if (pLayer.AreaOfInterest.Width < pTempLayer.AreaOfInterest.Width)
+                    pLayer = pTempLayer;
+            }
+            return pLayer;
+        }
+
+        private void axMapControl1_OnMapReplaced(object sender, IMapControlEvents2_OnMapReplacedEvent e)
+        {
+          //  //获取鹰眼图层
+          //  this.axMapControl2.AddLayer(this.GetOverviewLayer(this.axMapControl1.Map));
+          //  //设置 MapControl 显示范围至数据的全局范围
+          ////  this.axMapControl2.Extent = this.axMapControl1.FullExtent;
+          //  // 刷新鹰眼控件地图
+          //  this.axMapControl2.Refresh();
+        }
+
+        private void axMapControl1_OnFullExtentUpdated(object sender, IMapControlEvents2_OnFullExtentUpdatedEvent e)
+        {
+           // //获取鹰眼图层
+           // this.axMapControl2.AddLayer(this.GetOverviewLayer(this.axMapControl1.Map));
+           // // 设置 MapControl 显示范围至数据的全局范围
+           //// this.axMapControl2.Extent = this.axMapControl1.FullExtent;
+           // // 刷新鹰眼控件地图
+           // this.axMapControl2.Refresh();
+        }
+
+        // 将平面坐标转换为经纬度。
+        private IPoint GetGeo(IActiveView pActiveView, double x, double y)
+        {
+            try
+            {
+                IMap pMap = pActiveView.FocusMap;
+                IPoint pt = new PointClass();
+                ISpatialReferenceFactory pfactory = new SpatialReferenceEnvironmentClass();
+                ISpatialReference flatref = pMap.SpatialReference;
+                ISpatialReference earthref = pfactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_Beijing1954);
+                pt.PutCoords(x, y);
+
+                IGeometry geo = (IGeometry)pt;
+                geo.SpatialReference = flatref;
+                geo.Project(earthref);
+                double xx = pt.X;
+                return pt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+
+        // 将经纬度点转换为平面坐标。
+        private IPoint GetProject(IActiveView pActiveView, double x, double y)
+        {
+            try
+            {
+                IMap pMap = pActiveView.FocusMap;
+                IPoint pt = new PointClass();
+                ISpatialReferenceFactory pfactory = new SpatialReferenceEnvironmentClass();
+                ISpatialReference flatref = pMap.SpatialReference;
+                ISpatialReference earthref = pfactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_Beijing1954);
+                pt.PutCoords(x, y);
+                IGeometry geo = (IGeometry)pt;
+                geo.SpatialReference = earthref;
+                geo.Project(flatref);
+                return pt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+
+            }
+        }
+
+
+        private void sceneRotate(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            ICamera pCamera = this.axSceneControl1.Camera;      //取得三维活动区域的Camara      ，就像你照相一样的视角，它有Taget（目标点）和Observer（观察点）两个属性需要设置    
+            IPoint ptObserver = new PointClass();
+            ptObserver = pCamera.Observer;
+            for (double i = 0; i < 0.1;)
+            {
+                i += 0.0005;
+                ptObserver.X += i;
+                ptObserver.Y += i;
+
+                pCamera.Observer = ptObserver;
+                axSceneControl1.SceneGraph.RefreshViewers();        //刷新地图，（很多时候，看不到效果，都是你没有刷新）
+                System.Threading.Thread.Sleep(30);//停顿2秒钟  
+            }
+        }
+
+        private void axMapControl1_OnMouseDown_1(object sender, IMapControlEvents2_OnMouseDownEvent e)
+        {
+           
+        }
+        private void axSceneControl_OnMouseWheel(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                System.Drawing.Point pSceLoc = axSceneControl1.PointToScreen(this.axSceneControl1.Location);
+                System.Drawing.Point Pt = this.PointToScreen(e.Location);
+                if (Pt.X < pSceLoc.X || Pt.X > pSceLoc.X + axSceneControl1.Width || Pt.Y < pSceLoc.Y || Pt.Y > pSceLoc.Y + axSceneControl1.Height)
+                {
+                    return;
+                }
+                double scale = 0.2;
+                if (e.Delta < 0) scale = -0.2;
+                ICamera pCamera = axSceneControl1.Camera;
+                IPoint pPtObs = pCamera.Observer;
+                IPoint pPtTar = pCamera.Target;
+
+                IPoint point;
+                //point= pCamera.Target;
+                point = pCamera.Observer;
+                IEnvelope pEnv = new EnvelopeClass();
+                pEnv.XMax = point.X + 5;
+                pEnv.XMin = point.X - 5;
+                pEnv.YMax = point.Y + 5;
+                pEnv.YMin = point.Y - 5;
+
+                pPtObs.X += (pPtObs.X - pPtTar.X) * scale;
+                pPtObs.Y += (pPtObs.Y - pPtTar.Y) * scale;
+                pPtObs.Z += (pPtObs.Z - pPtTar.Z) * scale;
+                pCamera.Observer = pPtObs;
+                axSceneControl1.SceneGraph.RefreshViewers();
+
+                IRectangleElement pRectangleEle = new RectangleElementClass();
+                IElement pEle = pRectangleEle as IElement;
+                pEle.Geometry = pEnv;
+
+                //设置线框的边线对象，包括颜色和线宽
+                IRgbColor pColor = new RgbColorClass();
+                pColor.Red = 238;
+                pColor.Green = 99;
+                pColor.Blue = 99;
+                pColor.Transparency = 255;
+                // 产生一个线符号对象 
+                ILineSymbol pOutline = new SimpleLineSymbolClass();
+                pOutline.Width = 2;
+                pOutline.Color = pColor;
+
+                // 设置颜色属性 
+                pColor.Red = 238;
+                pColor.Green = 99;
+                pColor.Blue = 99;
+                pColor.Transparency = 0;
+
+                // 设置线框填充符号的属性 
+                IFillSymbol pFillSymbol = new SimpleFillSymbolClass();
+                pFillSymbol.Color = pColor;
+                pFillSymbol.Outline = pOutline;
+                IFillShapeElement pFillShapeEle = pEle as IFillShapeElement;
+                pFillShapeEle.Symbol = pFillSymbol;
+
+                // 得到鹰眼视图中的图形元素容器
+                IGraphicsContainer pGra = axMapControl1.Map as IGraphicsContainer;
+                IActiveView pAv = pGra as IActiveView;
+                // 在绘制前，清除 axMapControl1 中的任何图形元素 
+                pGra.DeleteAllElements();
+                // 鹰眼视图中添加线框
+                pGra.AddElement((IElement)pFillShapeEle, 0);
+                // 刷新鹰眼
+                pAv.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+            }
+            catch
+            {
+            }
+        }
+
+        private void axMapControl1_OnMouseUp(object sender, IMapControlEvents2_OnMouseUpEvent e)
+        {
+     
         }
     }
 }

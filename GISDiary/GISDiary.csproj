@@ -38,6 +38,10 @@
     <StartupObject>GISDiary.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSkin, Version=16.1.14.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\CSkin.dll</HintPath>
+    </Reference>
     <Reference Include="ESRI.ArcGIS.3DAnalyst, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -93,14 +97,12 @@
     <Reference Include="FControlAll">
       <HintPath>..\FControlAll\bin\Debug\FControlAll.dll</HintPath>
     </Reference>
-    <Reference Include="IrisSkin4">
-      <HintPath>bin\Debug\IrisSkin4dll\IrisSkin4.dll</HintPath>
-    </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -155,6 +157,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="test.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="test.Designer.cs">
+      <DependentUpon>test.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FormGlobe.resx">
       <DependentUpon>FormGlobe.cs</DependentUpon>
     </EmbeddedResource>
@@ -186,6 +194,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="test.resx">
+      <DependentUpon>test.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -350,6 +361,33 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+    <COMReference Include="stdole3">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="WMPDXMLib">
+      <Guid>{73F0DD5C-D071-46B6-A8BF-897C84EAAC49}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="WMPLauncher">
+      <Guid>{5CB42160-CD7C-4806-9367-1C4A65153F4A}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="WMPLib">
       <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
       <VersionMajor>1</VersionMajor>
@@ -368,6 +406,48 @@
       <Project>{543ECC35-3976-48EA-814C-0BE243AFA41F}</Project>
       <Name>FControlEve</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\七星鲁王宫.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\剑.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\秦岭神树.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\西沙海底墓.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\西王母宫.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\云顶天宫.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\张家古楼.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\白虎.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\麒麟.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\青龙.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\玄武.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\朱雀.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\剑hei.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
