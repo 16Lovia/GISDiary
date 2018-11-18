@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace GISDiary
 {
-    public partial class Form_showGrave : Skin_DevExpress
+    public partial class Form_showGrave : Form
     {
         public Form_showGrave()
         {
@@ -30,7 +30,7 @@ namespace GISDiary
             //难度系数
             int longi = 0;
             //MainForm f1 = new MainForm();
-            longi = MainForm.longitude;
+            longi =FormStart.longitude;
             switch (longi)
             {
                 case 117:

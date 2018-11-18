@@ -123,6 +123,16 @@ namespace GISDiary.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 展示 {
+            get {
+                object obj = ResourceManager.GetObject("展示", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 张家古楼 {
             get {
                 object obj = ResourceManager.GetObject("张家古楼", resourceCulture);
