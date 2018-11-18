@@ -260,7 +260,34 @@ namespace GISDiary
 
         #region"Stop Animation and Show Grave Information"
 
-          
+
+
+        private void showGrave()//资料卡展示
+        {
+
+            //十字丝定位放大
+
+            //子窗体展示
+            //longitude = 117;/*****************/
+            Form_showGrave fn = new Form_showGrave();
+            fn.MdiParent = this;
+            fn.StartPosition = FormStartPosition.CenterScreen;
+
+            /*            //除此之外，也可以手动设置窗口显示的位置，即窗口坐标。首先必须把窗体的显示位置设置为手动。
+                        fn.StartPosition = FormStartPosition.Manual;
+                        //随后获取屏幕的分辨率，也就是显示器屏幕的大小。
+                        int xWidth = SystemInformation.PrimaryMonitorSize.Width;//获取显示器屏幕宽度
+                        int yHeight = SystemInformation.PrimaryMonitorSize.Height;//高度
+                        //然后定义窗口位置，以主窗体为例
+                        //MessageBox.Show(xWidth.ToString(), yHeight.ToString());          
+                       //fn.Location = new Point(xWidth / 2, yHeight / 2);//这里需要再减去窗体本身的宽度和高度的一半
+                       在窗体的属性location里设置
+                       */
+
+            fn.Show();
+            SetParent((int)fn.Handle, (int)this.Handle);
+
+        }
 
 
         public void StopAnimationShowInfor(int AniID)
@@ -268,51 +295,31 @@ namespace GISDiary
 
             //camara设定
 
-            IActiveView pActiveView1 = this.axGlobeControl1.Globe as IActiveView;   //获取当前二维活动区域               
-            IEnvelope enve = pActiveView1.Extent as IEnvelope;      //将此二位区域的Extent 保存在Envelope中
-            IPoint point = new PointClass();        //将此区域的中心点保存起来
-            point.X = (enve.XMax + enve.XMin) / 2;  //取得视角中心点X坐标
-            point.Y = (enve.YMax + enve.YMin) / 2;  //取得视角中心点Y坐标
-
-            IPoint ptTaget = new PointClass();      //创建一个目标点
-            ptTaget = point;        //视觉区域中心点作为目标点
-            ptTaget.Z = 0;         //设置目标点高度，这里设为 0米
-
-            IPoint ptObserver = new PointClass();   //创建观察点 的X，Y，Z
-            ptObserver.X = point.X;     //设置观察点坐标的X坐标
-            ptObserver.Y = point.Y + 90;     //设置观察点坐标的Y坐标（这里加90米，是在南北方向上加了90米，当然这个数字可以自己定，意思就是将观察点和目标点有一定的偏差，从南向北观察
-            double height = (enve.Width < enve.Height) ? enve.Width : enve.Height;      //计算观察点合适的高度，这里用三目运算符实现的，效果稍微好一些，当然可以自己拟定
-            ptObserver.Z = height;              //设置观察点坐标的Y坐标
-
-            ICamera pCamera = (ICamera)this.axGlobeControl1.GlobeCamera;      //取得三维活动区域的Camara，就像你照相一样的视角，它有Taget（目标点）和Observer（观察点）两个属性需要设置    
-            pCamera.Target = ptTaget;       //赋予目标点
-            pCamera.Observer = ptObserver;      //将上面设置的观察点赋予camera的观察点
-            pCamera.Inclination = 90;       //设置三维场景视角，也就是高度角，视线与地面所成的角度
-            pCamera.Azimuth = 180;          //设置三维场景方位角，视线与向北的方向所成的角度
-            axGlobeControl1.GlobeDisplay.RefreshViewers();        //刷新地图，（很多时候，看不到效果，都是你没有刷新）
 
 
             //资料卡弹出
+
         }
         #endregion
 
-        private int a;//button点击次数、当前动画播放序号
 
-        private void btn_globe_Click(object sender, EventArgs e)
+
+        static string pathShp1 = @"res\Line_5s\poi5line1_lei.shp";
+        static string pathShp2 = @"res\Line_5s\poi5line2_lei.shp";
+        static string pathShp3 = @"res\Line_5s\poi5line3_lei.shp";
+        static string pathShp4 = @"res\Line_5s\poi5line4_lei.shp";
+        static string pathShp5 = @"res\Line_5s\poi5line5_lei.shp";
+
+        static string SaveFilePath1 = @"res\flyGlobe1";
+        static string SaveFilePath2 = @"res\flyGlobe2";
+        static string SaveFilePath3 = @"res\flyGlobe3";
+        static string SaveFilePath4 = @"res\flyGlobe4";
+        static string SaveFilePath5 = @"res\flyGlobe5";
+        static int a;//当前动画播放序号
+
+        public void partToshow(int a)
         {
-            string pathShp1 = @"res\Line_5s\poi5line1_lei.shp";
-            string pathShp2 = @"res\Line_5s\poi5line2_lei.shp";
-            string pathShp3 = @"res\Line_5s\poi5line3_lei.shp";
-            string pathShp4 = @"res\Line_5s\poi5line4_lei.shp";
-            string pathShp5 = @"res\Line_5s\poi5line5_lei.shp";
-
-            string SaveFilePath1 = @"res\flyGlobe1";
-            string SaveFilePath2 = @"res\flyGlobe2";
-            string SaveFilePath3 = @"res\flyGlobe3";
-            string SaveFilePath4 = @"res\flyGlobe4";
-            string SaveFilePath5 = @"res\flyGlobe5";
-
-            a++;
+            ++a;
             switch (a)
             {
                 case 1:
@@ -343,16 +350,22 @@ namespace GISDiary
                     break;
 
             }
-          
-        
-          
-          
+
+
+        }
+
+        private void btn_globe_Click(object sender, EventArgs e)
+        {
+            a = 0;
+            for (int i = 0; i<5;i++)
+            {
+                partToshow(a);
+
+            }
+           
         }
 
      
-        //private void btn_Scene_Click(object sender, EventArgs e)
-        //{
-        //    CreateAnimationFromPath_scene();
-        //}
+        
     }
 }

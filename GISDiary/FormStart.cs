@@ -69,7 +69,7 @@ namespace GISDiary
             //f3.StartPosition = FormStartPosition.CenterScreen;
             //f3.Show();
             //SetParent((int)f3.Handle, (int)this.Handle);
-            //tt
+            
 
         }
 
